@@ -13,8 +13,33 @@ return new class extends Migration
     {
         Schema::create('trainers', function (Blueprint $table) {
             $table->id();
+            $table->string('document_number')->unique();
             $table->string('name');
-            $table->string('specialty')->nullable();
+            $table->date('birthdate')->nullable();
+            $table->enum('gender', [
+                'male',
+                'female',
+                'other'
+            ])->nullable();
+            $table->string('phone');
+            $table->string('email')->unique();
+            $table->string('photo_path')->nullable();
+            $table->text('bio')->nullable();
+            $table->enum('specialty', [
+                'strength_training',
+                'cardio',
+                'yoga',
+                'pilates',
+                'nutrition',
+                'crossfit',
+                'other'
+            ])->nullable();
+            $table->decimal('rating', 2, 1)->default(0);
+            $table->enum('status', [
+                'active',
+                'inactive',
+                'suspended'
+            ])->default('active');
             $table->timestamps();
         });
     }

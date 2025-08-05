@@ -8,16 +8,31 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Member extends Model
 {
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'document_number',
+        'name',
+        'birthdate',
+        'gender',
+        'photo_path',
         'phone',
+        'email',
+        'address',
+        'city',
         'joined_at',
         'active',
+        'emergency_contact_name',
+        'emergency_contact_phone',
+        'height_cm',
+        'weight_kg',
+        'rating',
     ];
 
     protected $casts = [
         'joined_at' => 'date',
         'active'    => 'boolean',
+        'birthdate' => 'date',
+        'height_cm' => 'integer',
+        'weight_kg' => 'decimal:2',
+        'rating'    => 'decimal:1',
     ];
 
     public function memberships(): HasMany

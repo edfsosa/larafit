@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class TrainerResource extends Resource
 {
     protected static ?string $model = Trainer::class;
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
     protected static ?string $label = 'Entrenador';
     protected static ?string $pluralLabel = 'Entrenadores';
 
@@ -24,11 +24,67 @@ class TrainerResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('document_number')
+                    ->label('Document Number')
+                    ->integer()
+                    ->minValue(1)
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('specialty')
-                    ->maxLength(255),
+                Forms\Components\DatePicker::make('birthdate')
+                    ->native(false)
+                    ->default(now())
+                    ->minDate(now()->subYears(100))
+                    ->maxDate(now()),
+                Forms\Components\Radio::make('gender')
+                    ->options([
+                        'male' => 'Male',
+                        'female' => 'Female',
+                        'other' => 'Other',
+                    ])
+                    ->required(),
+                Forms\Components\FileUpload::make('photo_path')
+                    ->image()
+                    ->disk('public')
+                    ->directory('trainer-photos')
+                    ->nullable(),
+                Forms\Components\TextInput::make('phone')
+                    ->tel()
+                    ->required()
+                    ->maxLength(20),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required(),
+                Forms\Components\Select::make('specialty')
+                    ->options([
+                        'strength_training' => 'Strength Training',
+                        'cardio' => 'Cardio',
+                        'yoga' => 'Yoga',
+                        'pilates' => 'Pilates',
+                        'nutrition' => 'Nutrition',
+                        'crossfit' => 'Crossfit',
+                        'other' => 'Other',
+                    ])
+                    ->required(),
+                Forms\Components\Textarea::make('bio')
+                    ->rows(3)
+                    ->maxLength(1000)
+                    ->nullable(),
+                Forms\Components\TextInput::make('rating')
+                    ->numeric()
+                    ->minValue(0)
+                    ->maxValue(5)
+                    ->step(0.1)
+                    ->nullable(),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'active' => 'Active',
+                        'inactive' => 'Inactive',
+                        'suspended' => 'Suspended',
+                    ])
+                    ->default('active')
+                    ->required(),
             ]);
     }
 
@@ -36,9 +92,22 @@ class TrainerResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('photo_path')
+                    ->label('Photo'),
+                Tables\Columns\TextColumn::make('document_number')
+                    ->label('Document')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('phone')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('specialty')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
