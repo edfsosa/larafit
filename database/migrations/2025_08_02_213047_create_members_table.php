@@ -16,11 +16,7 @@ return new class extends Migration
             $table->string('document_number')->unique();
             $table->string('name');
             $table->date('birthdate')->nullable();
-            $table->enum('gender', [
-                'male',
-                'female',
-                'other'
-            ])->nullable();
+            $table->enum('gender', ['male', 'female'])->nullable();
             $table->string('photo_path')->nullable();
             $table->string('phone');
             $table->string('email')->unique();

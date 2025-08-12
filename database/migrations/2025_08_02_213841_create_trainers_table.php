@@ -16,11 +16,7 @@ return new class extends Migration
             $table->string('document_number')->unique();
             $table->string('name');
             $table->date('birthdate')->nullable();
-            $table->enum('gender', [
-                'male',
-                'female',
-                'other'
-            ])->nullable();
+            $table->enum('gender', ['male', 'female']);
             $table->string('phone');
             $table->string('email')->unique();
             $table->string('photo_path')->nullable();
@@ -32,14 +28,9 @@ return new class extends Migration
                 'pilates',
                 'nutrition',
                 'crossfit',
-                'other'
             ])->nullable();
             $table->decimal('rating', 2, 1)->default(0);
-            $table->enum('status', [
-                'active',
-                'inactive',
-                'suspended'
-            ])->default('active');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

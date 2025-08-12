@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Member extends Model
 {
@@ -38,6 +39,14 @@ class Member extends Model
     public function memberships(): HasMany
     {
         return $this->hasMany(Membership::class);
+    }
+
+    // Última membresía activa (por fecha de fin)
+    public function activeMembership(): HasOne
+    {
+        return $this->hasOne(Membership::class)
+            ->ofMany('end_date', 'max')
+            ->where('is_active', true);
     }
 
     public function attendanceRecords(): HasMany

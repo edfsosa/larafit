@@ -32,7 +32,6 @@ return new class extends Migration
             $table->string('equipment')->nullable(); // Equipment needed for the exercise e.g. dumbbell, barbell, bodyweight
             $table->string('primary_muscle_group')->nullable(); // Primary muscle group targeted by the exercise e.g. chest, back, legs
             $table->string('secondary_muscle_group')->nullable(); // Secondary muscle group targeted by the exercise e.g. arms, shoulders
-            $table->text('instructions')->nullable(); // Step-by-step instructions for performing the exercise
             $table->integer('default_sets')->default(3); // Default number of sets
             $table->integer('default_reps')->default(10); // Default number of repetitions
             $table->integer('default_rest_period')->default(60); // Default rest period in seconds

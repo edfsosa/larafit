@@ -17,7 +17,6 @@ class Exercise extends Model
         'equipment',
         'primary_muscle_group',
         'secondary_muscle_group',
-        'instructions',
         'default_sets',
         'default_reps',
         'default_rest_period',

@@ -9,13 +9,15 @@ class MembershipType extends Model
 {
     protected $fillable = [
         'name',
-        'duration_days',
+        'description',
+        'period',
         'price',
+        'is_active',
     ];
 
     protected $casts = [
-        'duration_days' => 'integer',
         'price'         => 'decimal:2',
+        'is_active'    => 'boolean',
     ];
 
     public function memberships(): HasMany

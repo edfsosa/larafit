@@ -20,5 +20,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => bcrypt('password'),
         ]);
+
+        $this->call(MembershipTypeSeeder::class);
+        $this->call(MemberSeeder::class);
+        $this->call(MembershipSeeder::class);
+        $this->call(ExerciseSeeder::class);
+        $this->call(TrainerSeeder::class);
+        $this->call(WorkoutPlanSeeder::class);
     }
 }
