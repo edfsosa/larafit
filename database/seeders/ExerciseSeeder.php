@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\MuscleGroup;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,9 +21,8 @@ class ExerciseSeeder extends Seeder
                 'video_url' => 'https://www.youtube.com/shorts/cWrJFIdTje0?feature=share',
                 'type' => 'strength',
                 'difficulty' => 'beginner',
-                'equipment' => 'bodyweight',
-                'primary_muscle_group' => 'chest',
-                'secondary_muscle_group' => 'triceps',
+                'equipment_id' => null,
+                'muscle_group_id' => MuscleGroup::where('name', 'Brazos')->first()->id,
                 'default_sets' => 3,
                 'default_reps' => 10,
                 'default_rest_period' => 60,
@@ -34,9 +34,8 @@ class ExerciseSeeder extends Seeder
                 'video_url' => 'https://www.youtube.com/shorts/cqoNTr02fRk?feature=share',
                 'type' => 'strength',
                 'difficulty' => 'beginner',
-                'equipment' => 'bodyweight',
-                'primary_muscle_group' => 'legs',
-                'secondary_muscle_group' => 'glutes',
+                'equipment_id' => null,
+                'muscle_group_id' => MuscleGroup::where('name', 'Piernas')->first()->id,
                 'default_sets' => 3,
                 'default_reps' => 10,
                 'default_rest_period' => 60,
@@ -48,9 +47,8 @@ class ExerciseSeeder extends Seeder
                 'video_url' => null,
                 'type' => 'strength',
                 'difficulty' => 'beginner',
-                'equipment' => 'bodyweight',
-                'primary_muscle_group' => 'core',
-                'secondary_muscle_group' => null,
+                'equipment_id' => null,
+                'muscle_group_id' => MuscleGroup::where('name', 'Abdomen')->first()->id,
                 'default_sets' => 3,
                 'default_reps' => 30,
                 'default_rest_period' => 60,

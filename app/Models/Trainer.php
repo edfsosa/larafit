@@ -28,11 +28,6 @@ class Trainer extends Model
         'is_active' => 'boolean',
     ];
 
-    public function classActivities(): HasMany
-    {
-        return $this->hasMany(ClassActivity::class);
-    }
-
     public function workouts(): HasMany
     {
         return $this->hasMany(WorkoutPlan::class);

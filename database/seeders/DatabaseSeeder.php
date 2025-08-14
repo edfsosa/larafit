@@ -24,8 +24,10 @@ class DatabaseSeeder extends Seeder
         $this->call(MembershipTypeSeeder::class);
         $this->call(MemberSeeder::class);
         $this->call(MembershipSeeder::class);
-        $this->call(ExerciseSeeder::class);
         $this->call(TrainerSeeder::class);
         $this->call(WorkoutPlanSeeder::class);
+        $this->call(MuscleGroupSeeder::class);
+        $this->call(EquipmentSeeder::class);
+        $this->call(ExerciseSeeder::class);
     }
 }

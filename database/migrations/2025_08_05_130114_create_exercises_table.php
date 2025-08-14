@@ -17,21 +17,10 @@ return new class extends Migration
             $table->text('description')->nullable(); // Detailed description of the exercise
             $table->string('image_path')->nullable(); // Path to an image file
             $table->string('video_url')->nullable(); // URL to a video demonstration
-            $table->enum('type', [
-                'cardio',
-                'strength',
-                'flexibility',
-                'balance',
-                'mobility'
-            ])->default('cardio'); // Type of exercise
-            $table->enum('difficulty', [
-                'beginner',
-                'intermediate',
-                'advanced'
-            ])->default('beginner'); // Difficulty level
-            $table->string('equipment')->nullable(); // Equipment needed for the exercise e.g. dumbbell, barbell, bodyweight
-            $table->string('primary_muscle_group')->nullable(); // Primary muscle group targeted by the exercise e.g. chest, back, legs
-            $table->string('secondary_muscle_group')->nullable(); // Secondary muscle group targeted by the exercise e.g. arms, shoulders
+            $table->enum('type', ['cardio', 'strength', 'flexibility', 'balance', 'mobility'])->default('cardio'); // Type of exercise
+            $table->enum('difficulty', ['beginner', 'intermediate', 'advanced'])->default('beginner'); // Difficulty level
+            $table->foreignId('equipment_id')->nullable()->constrained('equipment')->cascadeOnDelete(); // Foreign key to the equipment, nullable if no equipment is required
+            $table->foreignId('muscle_group_id')->constrained('muscle_groups')->cascadeOnDelete(); // Foreign key to the muscle group
             $table->integer('default_sets')->default(3); // Default number of sets
             $table->integer('default_reps')->default(10); // Default number of repetitions
             $table->integer('default_rest_period')->default(60); // Default rest period in seconds

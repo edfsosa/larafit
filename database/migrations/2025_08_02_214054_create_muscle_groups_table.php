@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservations', function (Blueprint $table) {
+        Schema::create('muscle_groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')
-                ->constrained('members');
-            $table->foreignId('class_activity_id')
-                ->constrained('class_activities');
+            $table->string('name')->unique();
+            $table->text('description')->nullable();
             $table->timestamps();
-            $table->unique(['member_id', 'class_activity_id'], 'reservation_unique');
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservations');
+        Schema::dropIfExists('muscle_groups');
     }
 };

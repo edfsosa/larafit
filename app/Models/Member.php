@@ -54,11 +54,6 @@ class Member extends Model
         return $this->hasMany(AttendanceRecord::class);
     }
 
-    public function reservations(): HasMany
-    {
-        return $this->hasMany(Reservation::class);
-    }
-
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
