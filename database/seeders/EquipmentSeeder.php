@@ -17,8 +17,8 @@ class EquipmentSeeder extends Seeder
             [
                 'name' => 'Cinta de correr',
                 'description' => 'Cinta de correr para entrenamiento cardiovascular',
-                'image_path' => null,
-                'video_url' => null,
+                'image_path' => 'equipment/images/cinta.png',
+                'video_url' => 'https://youtu.be/ji-5miebSAk',
                 'serial_number' => 'TRD123456',
                 'brand' => 'FitPro',
                 'model' => 'TP-2023',
@@ -31,8 +31,8 @@ class EquipmentSeeder extends Seeder
             [
                 'name' => 'Bicicleta estática',
                 'description' => 'Bicicleta estática para entrenamiento de resistencia',
-                'image_path' => null,
-                'video_url' => null,
+                'image_path' => 'equipment/images/bicicleta-estatica.jpg',
+                'video_url' => 'https://youtu.be/hA1NoKsMnT8',
                 'serial_number' => 'BST654321',
                 'brand' => 'CycleMax',
                 'model' => 'CM-2023',
@@ -45,8 +45,8 @@ class EquipmentSeeder extends Seeder
             [
                 'name' => 'Máquina de remo',
                 'description' => 'Máquina de remo para entrenamiento total del cuerpo',
-                'image_path' => null,
-                'video_url' => null,
+                'image_path' =>  'equipment/images/maquina-remo.jpg',
+                'video_url' => 'https://youtu.be/6EZuR79Bp_Q',
                 'serial_number' => 'MRM987654',
                 'brand' => 'RowMaster',
                 'model' => 'RM-2023',

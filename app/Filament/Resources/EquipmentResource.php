@@ -14,7 +14,10 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -41,9 +44,15 @@ class EquipmentResource extends Resource
                 FileUpload::make('image_path')
                     ->label('Imagen')
                     ->image()
-                    ->nullable()
+                    ->imageEditor()
                     ->disk('public')
-                    ->directory('equipments/images'),
+                    ->directory('equipment/images')
+                    ->visibility('public')
+                    ->preserveFilenames()
+                    ->maxSize(1024)
+                    ->acceptedFileTypes(['image/*'])
+                    ->downloadable()
+                    ->imageCropAspectRatio('1:1'),
                 TextInput::make('video_url')
                     ->label('URL del Video')
                     ->nullable()
@@ -106,6 +115,9 @@ class EquipmentResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('image_path')
+                    ->label('Imagen')
+                    ->circular(),
                 TextColumn::make('name')
                     ->label('Nombre')
                     ->searchable()
@@ -147,6 +159,26 @@ class EquipmentResource extends Resource
                     ->label('Modelo')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('serial_number')
+                    ->label('Número de Serie')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('purchased_at')
+                    ->label('Comprado')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('last_service_at')
+                    ->label('Último Servicio')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('next_service_due')
+                    ->label('Próximo Servicio')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->label('Creado')
                     ->dateTime('d/m/Y H:i')
@@ -159,10 +191,53 @@ class EquipmentResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('type')
+                    ->label('Tipo')
+                    ->options([
+                        'cardio' => 'Cardio',
+                        'strength' => 'Fuerza',
+                        'flexibility' => 'Flexibilidad',
+                        'balance' => 'Equilibrio',
+                        'mobility' => 'Movilidad',
+                    ])
+                    ->native(false)
+                    ->multiple(),
+                SelectFilter::make('status')
+                    ->label('Estado')
+                    ->options([
+                        'available' => 'Disponible',
+                        'maintenance' => 'Mantenimiento',
+                        'out_of_order' => 'Fuera de servicio',
+                    ])
+                    ->native(false)
+                    ->multiple(),
+                Filter::make('purchased_at')
+                    ->label('Fecha de Compra')
+                    ->form([
+                        DatePicker::make('purchased_from')
+                            ->label('Desde')
+                            ->native(false)
+                            ->closeOnDateSelection(),
+                        DatePicker::make('purchased_until')
+                            ->label('Hasta')
+                            ->native(false)
+                            ->closeOnDateSelection(),
+                    ])
+                    ->columns(2)
+                    ->query(function (Builder $query, array $data) {
+                        return $query
+                            ->when($data['purchased_from'], fn (Builder $query, $date) => $query->whereDate('purchased_at', '>=', $date))
+                            ->when($data['purchased_until'], fn (Builder $query, $date) => $query->whereDate('purchased_at', '<=', $date));
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('video_url')
+                    ->label('Ver Video')
+                    ->icon('heroicon-o-play-circle')
+                    ->url(fn (Equipment $record) => $record->video_url)
+                    ->openUrlInNewTab()
+                    ->visible(fn (Equipment $record) => !empty($record->video_url)),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -1,2 +1,8 @@
 *
 !.gitignore
+
+# permitir las carpetas equipment y exercises junto con sus archivos
+!equipment/
+!equipment/**
+!exercises/
+!exercises/**

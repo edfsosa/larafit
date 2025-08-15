@@ -16,7 +16,9 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -63,25 +65,26 @@ class ExerciseResource extends Resource
                             ])
                             ->native(false)
                             ->required(),
-                        Select::make('equipment')
+                        Select::make('equipment_id')
                             ->label('Equipo')
-                            ->options([
-                                'bodyweight' => 'Peso Corporal',
-                                'dumbbell' => 'Mancuerna',
-                                'barbell' => 'Barra',
-                                'resistance_band' => 'Banda de Resistencia',
-                                'none' => 'Ninguno',
-                            ])
+                            ->relationship('equipment', 'name')
+                            ->preload()
+                            ->searchable()
                             ->native(false)
                             ->nullable(),
                     ]),
                 FileUpload::make('image_path')
                     ->label('Imagen')
                     ->image()
+                    ->imageEditor()
                     ->disk('public')
-                    ->directory('exercise_images')
+                    ->directory('exercises/images')
                     ->visibility('public')
-                    ->nullable()
+                    ->preserveFilenames()
+                    ->maxSize(1024)
+                    ->acceptedFileTypes(['image/*'])
+                    ->downloadable()
+                    ->imageCropAspectRatio('1:1')
                     ->columnSpanFull(),
                 Grid::make(3)
                     ->schema([
@@ -89,43 +92,27 @@ class ExerciseResource extends Resource
                             ->label('Video URL')
                             ->url()
                             ->maxLength(255),
-
-                        Select::make('primary_muscle_group')
-                            ->label('Grupo Muscular Primario')
-                            ->options([
-                                'chest' => 'Pecho',
-                                'back' => 'Espalda',
-                                'legs' => 'Piernas',
-                                'arms' => 'Brazos',
-                                'shoulders' => 'Hombros',
-                            ])
+                        Select::make('muscle_group_id')
+                            ->label('Grupo Muscular')
+                            ->relationship('muscleGroup', 'name')
+                            ->preload()
+                            ->searchable()
                             ->native(false)
-                            ->nullable(),
-                        Select::make('secondary_muscle_group')
-                            ->label('Grupo Muscular Secundario')
-                            ->options([
-                                'triceps' => 'Tríceps',
-                                'biceps' => 'Bíceps',
-                                'glutes' => 'Glúteos',
-                                'calves' => 'Pantorrillas',
-                                'core' => 'Core',
-                            ])
-                            ->native(false)
-                            ->nullable(),
+                            ->required(),
                         TextInput::make('default_sets')
-                            ->label('Series por Defecto')
+                            ->label('Series')
                             ->required()
                             ->numeric()
                             ->minValue(1)
                             ->default(3),
                         TextInput::make('default_reps')
-                            ->label('Repeticiones por Defecto')
+                            ->label('Repeticiones')
                             ->required()
                             ->numeric()
                             ->minValue(1)
                             ->default(10),
                         TextInput::make('default_rest_period')
-                            ->label('Período de Descanso por Defecto (segundos)')
+                            ->label('Período de Descanso (segundos)')
                             ->required()
                             ->numeric()
                             ->minValue(1)
@@ -143,6 +130,9 @@ class ExerciseResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('image_path')
+                    ->label('Imagen')
+                    ->circular(),
                 TextColumn::make('name')
                     ->label('Nombre')
                     ->sortable()
@@ -169,16 +159,12 @@ class ExerciseResource extends Resource
                     })
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('equipment')
+                TextColumn::make('equipment.name')
                     ->label('Equipo')
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'bodyweight' => 'Peso Corporal',
-                        'dumbbell' => 'Mancuerna',
-                        'barbell' => 'Barra',
-                        'resistance_band' => 'Banda de Resistencia',
-                        'none' => 'Ninguno',
-                        default => 'Desconocido',
-                    })
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('muscleGroup.name')
+                    ->label('Grupo Muscular')
                     ->sortable()
                     ->searchable(),
                 IconColumn::make('is_active')
@@ -196,16 +182,41 @@ class ExerciseResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                TernaryFilter::make('is_active')
-                    ->label('Activo')
-                    ->nullable()
-                    ->placeholder('Todos')
-                    ->trueLabel('Sí')
-                    ->falseLabel('No')
+                SelectFilter::make('type')
+                    ->label('Tipo')
+                    ->options([
+                        'strength' => 'Fortaleza',
+                        'cardio' => 'Cardio',
+                        'flexibility' => 'Flexibilidad',
+                        'balance' => 'Equilibrio',
+                        'mobility' => 'Movilidad',
+                    ])
+                    ->native(false),
+                SelectFilter::make('difficulty')
+                    ->label('Dificultad')
+                    ->options([
+                        'beginner' => 'Principiante',
+                        'intermediate' => 'Intermedio',
+                        'advanced' => 'Avanzado',
+                    ])
+                    ->native(false),
+                SelectFilter::make('equipment_id')
+                    ->label('Equipo')
+                    ->relationship('equipment', 'name')
+                    ->native(false),
+                SelectFilter::make('muscle_group_id')
+                    ->label('Grupo Muscular')
+                    ->relationship('muscleGroup', 'name')
                     ->native(false),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('video_url')
+                    ->label('Ver Video')
+                    ->icon('heroicon-o-play-circle')
+                    ->url(fn(Exercise $record): string => $record->video_url ?? '')
+                    ->openUrlInNewTab()
+                    ->visible(fn(Exercise $record): bool => !empty($record->video_url)),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
