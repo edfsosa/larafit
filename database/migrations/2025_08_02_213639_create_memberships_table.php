@@ -13,16 +13,13 @@ return new class extends Migration
     {
         Schema::create('memberships', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')
-                ->constrained('members')
-                ->onDelete('cascade');
-            $table->foreignId('membership_type_id')
-                ->constrained('membership_types');
+            $table->foreignId('member_id')->constrained('members')->cascadeOnDelete();
+            $table->foreignId('membership_type_id')->constrained('membership_types')->cascadeOnDelete();
             $table->date('start_date');
-            $table->date('end_date');
+            $table->date('end_date')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
-
-            $table->unique(['member_id', 'start_date', 'end_date'], 'memberships_unique_period');
+            $table->unique(['member_id', 'start_date', 'end_date'], 'uniq_member_period');
         });
     }
 

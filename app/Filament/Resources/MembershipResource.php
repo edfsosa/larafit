@@ -6,9 +6,17 @@ use App\Filament\Resources\MembershipResource\Pages;
 use App\Filament\Resources\MembershipResource\RelationManagers;
 use App\Models\Membership;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -24,18 +32,35 @@ class MembershipResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('member_id')
-                    ->relationship('member', 'first_name')
-                    ->label('Member')
+                Select::make('member_id')
+                    ->label('Miembro')
+                    ->relationship('member', 'name')
+                    ->native(false)
+                    ->preload()
+                    ->searchable()
                     ->required(),
-                Forms\Components\Select::make('membership_type_id')
+                Select::make('membership_type_id')
+                    ->label('Tipo de Membresía')
                     ->relationship('membershipType', 'name')
-                    ->label('Type')
+                    ->native(false)
+                    ->preload()
+                    ->searchable()
                     ->required(),
-                Forms\Components\DatePicker::make('start_date')
-                    ->required(),
-                Forms\Components\DatePicker::make('end_date')
-                    ->required(),
+                DatePicker::make('start_date')
+                    ->label('Fecha de Inicio')
+                    ->displayFormat('d/m/Y')
+                    ->native(false)
+                    ->closeOnDateSelection()
+                    ->required()
+                    ->default(now()),
+                DatePicker::make('end_date')
+                    ->label('Fecha de Fin')
+                    ->displayFormat('d/m/Y')
+                    ->native(false)
+                    ->closeOnDateSelection()
+                    ->after('start_date')
+                    ->nullable()
+                    ->hiddenOn('create'),
             ]);
     }
 
@@ -43,35 +68,85 @@ class MembershipResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('member.first_name')
-                    ->label('First Name')
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable()
+                    ->searchable()
+                    ->copyable(),
+                TextColumn::make('member.name')
+                    ->label('Miembro')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('member.last_name')
-                    ->label('Last Name')
+                TextColumn::make('membershipType.name')
+                    ->label('Tipo')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('membershipType.name')
-                    ->label('Type')
-                    ->searchable()
+                TextColumn::make('start_date')
+                    ->label('Desde')
+                    ->date('d/m/Y')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('start_date')
-                    ->date()
+                TextColumn::make('end_date')
+                    ->label('Hasta')
+                    ->date('d/m/Y')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('end_date')
-                    ->date()
+                IconColumn::make('is_active')
+                    ->label('Activo')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                TextColumn::make('created_at')
+                    ->label('Creado')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                TextColumn::make('updated_at')
+                    ->label('Actualizado')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('member_id')
+                    ->label('Miembro')
+                    ->relationship('member', 'name')
+                    ->native(false)
+                    ->preload()
+                    ->searchable()
+                    ->placeholder('Buscar miembro'),
+                SelectFilter::make('membership_type_id')
+                    ->label('Tipo de Membresía')
+                    ->relationship('membershipType', 'name')
+                    ->native(false)
+                    ->preload()
+                    ->searchable()
+                    ->placeholder('Buscar tipo de membresía'),
+                TernaryFilter::make('is_active')
+                    ->label('Activo')
+                    ->nullable()
+                    ->placeholder('Todos')
+                    ->trueLabel('Sí')
+                    ->falseLabel('No')
+                    ->native(false),
+                Filter::make('start_date')
+                    ->form([
+                        Grid::make(2)
+                            ->schema([
+                                DatePicker::make('from')
+                                    ->label('Desde')
+                                    ->displayFormat('d/m/Y')
+                                    ->native(false)
+                                    ->closeOnDateSelection(),
+                                DatePicker::make('to')
+                                    ->label('Hasta')
+                                    ->displayFormat('d/m/Y')
+                                    ->native(false)
+                                    ->closeOnDateSelection()
+                                    ->after('from'),
+                            ])
+                    ])
+                     ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['from'], fn (Builder $query, $date): Builder => $query->whereDate('start_date', '>=', $date))
+                            ->when($data['to'], fn (Builder $query, $date): Builder => $query->whereDate('end_date', '<=', $date));
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

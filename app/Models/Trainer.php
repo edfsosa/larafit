@@ -4,16 +4,32 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Trainer extends Model
 {
     protected $fillable = [
+        'document_number',
         'name',
+        'birthdate',
+        'gender',
+        'phone',
+        'email',
+        'photo_path',
+        'bio',
         'specialty',
+        'rating',
+        'is_active',
     ];
 
-    public function classActivities(): HasMany
+    protected $casts = [
+        'rating' => 'decimal:1',
+        'birthdate' => 'date',
+        'is_active' => 'boolean',
+    ];
+
+    public function workouts(): HasMany
     {
-        return $this->hasMany(ClassActivity::class);
+        return $this->hasMany(WorkoutPlan::class);
     }
 }

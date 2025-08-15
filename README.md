@@ -1,61 +1,95 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Larafit
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Larafit** es una aplicación web para la gestión integral de gimnasios, construida con **Laravel 12** y **FilamentPHP** para el panel administrativo.
 
-## About Laravel
+## Características
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Gestión de Socios**: Inscripción, perfil, datos de contacto y metas de entrenamiento.
+- **Membresías**: Tipos, duración, precios y renovaciones.
+- **Control de Asistencia**: Registro de entradas y salidas (con futuro soporte para control facial).
+- **Entrenadores**: Perfiles, especialidades, disponibilidad y tarifas.
+- **Clases/Actividades**: Horarios, cupos, reservas y asignación de entrenadores.
+- **Pagos**: Gestión de cobros, vencimientos y reportes.
+- **Rutinas de Ejercicio**:
+  - Catálogo de ejercicios (tipos, dificultad, multimedia, parámetros por defecto).
+  - Planes de entrenamiento asignados a socios.
+  - Ítems de rutina con series, repeticiones, peso, tempo, superseries, cardio, etc.
+  - Comentarios y marcado de completado por socio o entrenador.
+- **Roles y Permisos** con **Spatie**:
+  - Roles: `admin`, `trainer`, `member`.
+  - Permisos granulares (gestión de recursos y acceso).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requisitos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP ≥ 8.1
+- Composer
+- MySQL (o MariaDB)
+- Node.js & NPM (para assets de Filament)
+- Servidor web (Nginx, Apache)
+- Opcional: HestiaCP para gestión de dominios y SSL
 
-## Learning Laravel
+## Instalación local
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. **Clonar repositorio**  
+   ```bash
+   git clone https://github.com/TU_USUARIO/larafit.git
+   cd larafit
+   ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2. **Variables de entorno**  
+   ```bash
+   cp .env.example .env
+   ```  
+   Configura en `.env`:
+   ```
+   APP_URL=http://localhost
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=larafit
+   DB_USERNAME=tu_usuario
+   DB_PASSWORD=tu_contraseña
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. **Instalar dependencias**  
+   ```bash
+   composer install --no-dev --optimize-autoloader
+   npm install
+   npm run build
+   ```
 
-## Laravel Sponsors
+4. **Key y migraciones**  
+   ```bash
+   php artisan key:generate
+   php artisan migrate --seed
+   php artisan storage:link
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5. **Servir la aplicación**  
+   ```bash
+   php artisan serve
+   ```  
+   Accede a `http://localhost/admin` y entra con el usuario admin creado.
 
-### Premium Partners
+## Roles y Permisos
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- Ejecuta el seeder tras migrar:
+  ```bash
+  php artisan db:seed --class=RolesAndPermissionsSeeder
+  ```
+- Asigna roles en Tinker o desde Filament:
+  ```php
+  $user->assignRole('trainer');
+  $user->assignRole('member');
+  ```
 
-## Contributing
+## Contribuciones
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. **Fork** del proyecto.
+2. Crea una **branch** feature.
+3. Haz **pull request** describiendo cambios.
+4. Asegura que todas las **migraciones** y **seeders** estén actualizados.
 
-## Code of Conduct
+## Licencia
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proyecto de código abierto bajo la licencia MIT.
