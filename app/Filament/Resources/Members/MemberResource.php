@@ -9,6 +9,7 @@ use App\Filament\Resources\Members\Schemas\MemberForm;
 use App\Filament\Resources\Members\Tables\MembersTable;
 use App\Models\Member;
 use BackedEnum;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -33,7 +34,8 @@ class MemberResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\RoutinesRelationManager::class,
+            RelationManagers\MembershipsRelationManager::class,
         ];
     }
 

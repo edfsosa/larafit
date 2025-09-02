@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('reps')->default(10);
             $table->integer('rest_seconds')->default(60);
             $table->text('instructions')->nullable();
+            $table->unique(['exercise_id', 'routine_id']);
             $table->timestamps();
         });
     }

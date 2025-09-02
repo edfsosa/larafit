@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Exercise;
 use App\Models\ExerciseRoutine;
 use App\Models\Routine;
+use App\Models\Trainer;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -43,24 +44,29 @@ class ExerciseRoutineSeeder extends Seeder
             Exercise::create($exercise);
         }
 
+        $trainers = Trainer::all();
+
         $routines = [
             [
                 'name' => 'Full Body Beginner',
                 'description' => 'A beginner-friendly full body workout routine.',
                 'difficulty' => 'beginner',
                 'is_active' => true,
+                'trainer_id' => $trainers->random()->id,
             ],
             [
                 'name' => 'Upper Body Strength',
                 'description' => 'Focus on building upper body strength with this routine.',
                 'difficulty' => 'intermediate',
                 'is_active' => true,
+                'trainer_id' => $trainers->random()->id,
             ],
             [
                 'name' => 'Advanced HIIT',
                 'description' => 'High-intensity interval training for advanced users.',
                 'difficulty' => 'advanced',
                 'is_active' => true,
+                'trainer_id' => $trainers->random()->id,
             ],
         ];
 

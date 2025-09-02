@@ -1,19 +1,57 @@
 <?php
 
-namespace App\Filament\Resources\Routines\Tables;
+namespace App\Filament\Resources\Trainers\RelationManagers;
 
+use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\DissociateAction;
+use Filament\Actions\DissociateBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
-class RoutinesTable
+class RoutinesRelationManager extends RelationManager
 {
-    public static function configure(Table $table): Table
+    protected static string $relationship = 'routines';
+
+    public function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextInput::make('name')
+                    ->label('Nombre')
+                    ->required(),
+                Select::make('difficulty')
+                    ->label('Dificultad')
+                    ->options([
+                        'beginner' => 'Principiante',
+                        'intermediate' => 'Intermedio',
+                        'advanced' => 'Avanzado',
+                    ])
+                    ->native(false)
+                    ->required(),
+                Textarea::make('description')
+                    ->label('Descripción')
+                    ->rows(3)
+                    ->columnSpanFull()
+                    ->nullable(),
+            ]);
+    }
+
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('name')
             ->columns([
                 TextColumn::make('name')
                     ->label('Nombre')
@@ -36,10 +74,6 @@ class RoutinesTable
                     })
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('trainer.user.name')
-                    ->label('Entrenador')
-                    ->searchable()
-                    ->sortable(),
                 ToggleColumn::make('is_active')
                     ->label('Activo')
                     ->sortable(),
@@ -57,13 +91,11 @@ class RoutinesTable
             ->filters([
                 //
             ])
+            ->headerActions([
+                CreateAction::make(),
+            ])
             ->recordActions([
                 EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
             ]);
     }
 }

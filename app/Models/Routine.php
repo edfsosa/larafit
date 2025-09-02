@@ -11,6 +11,7 @@ class Routine extends Model
         'description',
         'difficulty',
         'is_active',
+        'trainer_id',
     ];
 
     public function exercises()
@@ -25,5 +26,10 @@ class Routine extends Model
         return $this->belongsToMany(Member::class, 'member_routines')
                     ->withPivot('assigned_at')
                     ->withTimestamps();
+    }
+
+    public function trainer()
+    {
+        return $this->belongsTo(Trainer::class);
     }
 }

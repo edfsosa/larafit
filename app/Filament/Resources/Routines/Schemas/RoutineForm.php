@@ -26,6 +26,14 @@ class RoutineForm
                     ])
                     ->native(false)
                     ->required(),
+                Select::make('trainer_id')
+                    ->label('Entrenador')
+                    ->relationship('trainer', 'id')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->user->name)
+                    ->searchable()
+                    ->preload()
+                    ->native(false)
+                    ->required(),
                 Toggle::make('is_active')
                     ->label('Activo')
                     ->default(true)
@@ -38,6 +46,6 @@ class RoutineForm
                     ->columnSpanFull()
                     ->nullable(),
             ])
-            ->columns(3);
+            ->columns(4);
     }
 }

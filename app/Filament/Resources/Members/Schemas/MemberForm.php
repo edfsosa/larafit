@@ -16,9 +16,7 @@ class MemberForm
                 Select::make('user_id')
                     ->label('Usuario')
                     ->relationship('user', 'name')
-                    ->preload()
-                    ->searchable()
-                    ->native(false)
+                    ->disabled()
                     ->required(),
                 DatePicker::make('joined_at')
                     ->label('Fecha de ingreso')
@@ -58,6 +56,7 @@ class MemberForm
                     ->default('active')
                     ->hiddenOn('create')
                     ->required(),
-            ]);
+            ])
+            ->columns(3);
     }
 }

@@ -9,6 +9,7 @@ use App\Filament\Resources\Routines\Schemas\RoutineForm;
 use App\Filament\Resources\Routines\Tables\RoutinesTable;
 use App\Models\Routine;
 use BackedEnum;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -35,7 +36,7 @@ class RoutineResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ExercisesRelationManager::class,
         ];
     }
 
