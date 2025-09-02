@@ -20,8 +20,8 @@ class Trainer extends Model
     public function members()
     {
         return $this->belongsToMany(Member::class, 'member_trainers')
-                    ->withPivot('assigned_at')
-                    ->withTimestamps();
+            ->withPivot('assigned_at')
+            ->withTimestamps();
     }
 
     public function attendances()

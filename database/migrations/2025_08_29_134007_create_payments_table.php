@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('membership_id')->nullable()->constrained()->nullOnDelete();
             $table->decimal('amount', 8, 2);
             $table->date('date');
-            $table->enum('method', ['credit_card', 'paypal', 'bank_transfer', 'cash']);
+            $table->enum('method', ['credit_card', 'debit_card', 'paypal', 'bank_transfer', 'cash']);
             $table->text('notes')->nullable();
             $table->timestamps();
         });

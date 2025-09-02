@@ -36,6 +36,7 @@ class MemberResource extends Resource
         return [
             RelationManagers\RoutinesRelationManager::class,
             RelationManagers\MembershipsRelationManager::class,
+            RelationManagers\PaymentsRelationManager::class,
         ];
     }
 

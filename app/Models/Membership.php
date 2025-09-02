@@ -19,4 +19,14 @@ class Membership extends Model
                     ->withPivot('start_date', 'end_date', 'status')
                     ->withTimestamps();
     }
+
+    public function memberMemberships()
+    {
+        return $this->hasMany(MemberMembership::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasManyThrough(Payment::class, MemberMembership::class);
+    }
 }

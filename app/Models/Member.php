@@ -28,15 +28,15 @@ class Member extends Model
     public function memberships(): BelongsToMany
     {
         return $this->belongsToMany(Membership::class, 'member_memberships')
-                    ->withPivot('start_date', 'end_date', 'status')
-                    ->withTimestamps();
+            ->withPivot('start_date', 'end_date', 'status')
+            ->withTimestamps();
     }
 
     public function trainers(): BelongsToMany
     {
         return $this->belongsToMany(Trainer::class, 'member_trainers')
-                    ->withPivot('assigned_at')
-                    ->withTimestamps();
+            ->withPivot('assigned_at')
+            ->withTimestamps();
     }
 
     public function payments(): HasMany
@@ -52,7 +52,7 @@ class Member extends Model
     public function routines(): BelongsToMany
     {
         return $this->belongsToMany(Routine::class, 'member_routines')
-                    ->withPivot('assigned_at', 'estimated_time', 'status', 'assigned_by')
-                    ->withTimestamps();
+            ->withPivot('assigned_at', 'estimated_time', 'status', 'assigned_by')
+            ->withTimestamps();
     }
 }
