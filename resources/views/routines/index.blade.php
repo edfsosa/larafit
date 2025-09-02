@@ -1,19 +1,25 @@
 <x-layouts.app :title="__('My Routines')">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
         @if ($routines->isEmpty())
-            <p class="text-gray-600">{{ __('You have no routines yet.') }}</p>
+            <div class="text-center text-gray-600">
+                <p>{{ __('No routines found.') }}</p>
+                <a href="{{ route('routines.create') }}" class="text-blue-500 hover:underline">
+                    {{ __('Add a new routine') }}
+                </a>
+            </div>
         @else
+            <a href="{{ route('routines.create') }}" class="text-blue-500 hover:underline">
+                {{ __('Add a new routine') }}
+            </a>
             <ul class="space-y-4">
                 @foreach ($routines as $routine)
-                    <li class="p-4 border rounded shadow">
-                        <h2 class="text-lg font-semibold">{{ $routine->name }}</h2>
-                        <p class="text-gray-600">{{ $routine->description }}</p>
-                        <p class="text-sm text-gray-500">{{ __('Created at:') }}
-                            {{ $routine->created_at->format('d/m/Y') }}
-                        </p>
-                    </li>
+                    <x-routine-item :routine="$routine" />
                 @endforeach
             </ul>
+            <!-- Paginación -->
+            <div class="mt-4">
+                {{ $routines->links() }}
+            </div>
         @endif
     </div>
 </x-layouts.app>

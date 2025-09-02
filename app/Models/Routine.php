@@ -9,13 +9,9 @@ class Routine extends Model
     protected $fillable = [
         'name',
         'description',
-        'trainer_id',
+        'difficulty',
+        'is_active',
     ];
-
-    public function trainer()
-    {
-        return $this->belongsTo(Trainer::class);
-    }
 
     public function exercises()
     {

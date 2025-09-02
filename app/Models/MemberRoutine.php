@@ -9,7 +9,10 @@ class MemberRoutine extends Model
     protected $fillable = [
         'member_id',
         'routine_id',
+        'trainer_id',
         'assigned_at',
+        'estimated_time',
+        'status',
     ];
 
     public function member()
@@ -20,5 +23,10 @@ class MemberRoutine extends Model
     public function routine()
     {
         return $this->belongsTo(Routine::class);
+    }
+
+    public function trainer()
+    {
+        return $this->belongsTo(Trainer::class);
     }
 }

@@ -19,9 +19,17 @@
                 wire:navigate>
                 {{ __('Dashboard') }}
             </flux:navbar.item>
-            <flux:navbar.item icon="clipboard" :href="route('user.routines')"
-                :current="request()->routeIs('user.routines')" wire:navigate>
+            <flux:navbar.item icon="clipboard" :href="route('routines.index')"
+                :current="request()->routeIs('routines.index')" wire:navigate>
                 {{ __('My Routines') }}
+            </flux:navbar.item>
+            <flux:navbar.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.index')"
+                wire:navigate>
+                {{ __('Users') }}
+            </flux:navbar.item>
+            <flux:navbar.item icon="users" :href="route('members.index')" :current="request()->routeIs('members.index')"
+                wire:navigate>
+                {{ __('Members') }}
             </flux:navbar.item>
         </flux:navbar>
 

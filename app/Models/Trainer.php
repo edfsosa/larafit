@@ -28,9 +28,4 @@ class Trainer extends Model
     {
         return $this->morphMany(Attendance::class, 'attendable');
     }
-
-    public function routines()
-    {
-        return $this->hasMany(Routine::class);
-    }
 }
