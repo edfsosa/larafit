@@ -22,8 +22,28 @@ class Equipment extends Model
         'purchase_price',
     ];
 
+    protected $casts = [
+        'purchased_at' => 'date',
+        'purchase_price' => 'decimal:2',
+    ];
+
     public function maintenances()
     {
         return $this->hasMany(EquipmentMaintenance::class, 'equipment_id');
+    }
+
+    public function exerciseRoutines()
+    {
+        return $this->hasMany(ExerciseRoutine::class, 'equipment_id');
+    }
+
+    public function exercises()
+    {
+        return $this->hasManyThrough(Exercise::class, ExerciseRoutine::class);
+    }
+
+    public function scopeAvailable($query)
+    {
+        return $query->where('status', 'available');
     }
 }

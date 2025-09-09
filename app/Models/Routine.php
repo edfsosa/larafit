@@ -27,4 +27,9 @@ class Routine extends Model
             ->withPivot('assigned_at', 'status', 'notes', 'trainer_id')
             ->withTimestamps();
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 }

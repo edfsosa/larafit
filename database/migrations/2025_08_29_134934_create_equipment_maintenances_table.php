@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('equipment_id')->constrained('equipment')->cascadeOnDelete();
             $table->date('date');
-            $table->enum('type', ['routine', 'repair', 'inspection', 'other'])->default('routine');
+            $table->enum('type', ['preventive', 'repair', 'inspection', 'other'])->default('preventive');
             $table->text('description')->nullable();
             $table->decimal('cost', 10, 2)->nullable();
             $table->timestamps();

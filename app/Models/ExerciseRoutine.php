@@ -18,6 +18,15 @@ class ExerciseRoutine extends Model
         'instructions',
     ];
 
+    protected $casts = [
+        'sets' => 'integer',
+        'reps' => 'integer',
+        'rest_seconds' => 'integer',
+        'duration_seconds' => 'integer',
+        'order' => 'integer',
+    ];
+
+
     public function exercise()
     {
         return $this->belongsTo(Exercise::class);
@@ -31,5 +40,20 @@ class ExerciseRoutine extends Model
     public function equipment()
     {
         return $this->belongsTo(Equipment::class);
+    }
+
+    public function getExerciseNameAttribute()
+    {
+        return $this->exercise?->name;
+    }
+
+    public function getRoutineNameAttribute()
+    {
+        return $this->routine?->name;
+    }
+
+    public function getEquipmentNameAttribute()
+    {
+        return $this->equipment?->name;
     }
 }

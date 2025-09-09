@@ -29,7 +29,7 @@ class Trainer extends Model
         return $this->morphMany(Attendance::class, 'attendable');
     }
 
-    public function routines()
+    public function assignedRoutines()
     {
         return $this->belongsToMany(Routine::class, 'member_routines')
             ->withPivot('assigned_at', 'status', 'notes', 'member_id')
@@ -38,6 +38,12 @@ class Trainer extends Model
 
     public function memberRoutines()
     {
-        return $this->hasMany(MemberRoutine::class);
+        return $this->hasMany(MemberRoutine::class)
+            ->with('routine', 'member');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->user?->name;
     }
 }

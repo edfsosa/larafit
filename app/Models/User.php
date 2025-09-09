@@ -93,4 +93,19 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasRole('Admin');
     }
+
+    public function isMember(): bool
+    {
+        return $this->hasRole('Miembro');
+    }
+
+    public function isTrainer(): bool
+    {
+        return $this->hasRole('Entrenador');
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('Admin');
+    }
 }

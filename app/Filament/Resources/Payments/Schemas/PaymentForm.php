@@ -14,21 +14,22 @@ class PaymentForm
     {
         return $schema
             ->components([
-                Select::make('member_id')
-                    ->label('Miembro')
-                    ->relationship('member', 'id')
-                    ->getOptionLabelFromRecordUsing(fn($record) => $record->user->name)
-                    ->native(false)
-                    ->preload()
-                    ->required()
-                    ->searchable(),
-                Select::make('membership_id')
+                Select::make('member_membership_id')
                     ->label('Membresía')
-                    ->relationship('membership', 'name')
+                    ->options(function () {
+                        return \App\Models\MemberMembership::with('member.user', 'membership')
+                            ->where('status', 'active')
+                            ->get()
+                            ->mapWithKeys(function ($membership) {
+                                $memberName = $membership->member?->user?->name ?? 'Desconocido';
+                                $membershipName = $membership->membership?->name ?? 'Desconocida';
+                                return [$membership->id => "{$memberName} - {$membershipName}"];
+                            });
+                    })
                     ->native(false)
+                    ->searchable()
                     ->preload()
-                    ->required()
-                    ->searchable(),
+                    ->required(),
                 TextInput::make('amount')
                     ->label('Monto')
                     ->integer()

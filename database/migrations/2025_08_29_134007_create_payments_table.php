@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('membership_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('member_membership_id')->constrained('member_memberships')->cascadeOnDelete();
             $table->decimal('amount', 8, 2);
             $table->date('date');
             $table->enum('method', ['credit_card', 'debit_card', 'paypal', 'bank_transfer', 'cash']);

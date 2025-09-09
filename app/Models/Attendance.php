@@ -13,6 +13,11 @@ class Attendance extends Model
         'present'
     ];
 
+    protected $casts = [
+        'date' => 'date',
+        'present' => 'boolean',
+    ];
+
     public function attendable()
     {
         return $this->morphTo();
@@ -21,5 +26,25 @@ class Attendance extends Model
     public function logs()
     {
         return $this->hasMany(AttendanceLog::class);
+    }
+
+    public function scopeforDate($query, $date)
+    {
+        return $query->where('date', $date);
+    }
+
+    public function scopePresent($query)
+    {
+        return $query->where('present', true);
+    }
+
+    public function scopeAbsent($query)
+    {
+        return $query->where('present', false);
+    }
+
+    public function getAttendeeNameAttribute()
+    {
+        return $this->attendable?->user?->name;
     }
 }

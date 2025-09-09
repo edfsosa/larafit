@@ -14,6 +14,12 @@ class MemberMembership extends Model
         'status',
     ];
 
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+    ];
+
+
     public function member()
     {
         return $this->belongsTo(Member::class);
@@ -27,5 +33,21 @@ class MemberMembership extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active')
+            ->where('end_date', '>=', now());
+    }
+
+    public function getMemberNameAttribute()
+    {
+        return $this->member?->user?->name;
+    }
+
+    public function getMembershipNameAttribute()
+    {
+        return $this->membership?->name;
     }
 }

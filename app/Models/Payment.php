@@ -7,21 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 class Payment extends Model
 {
     protected $fillable = [
-        'member_id',
-        'membership_id',
+        'member_membership_id',
         'amount',
         'date',
         'method',
         'notes',
     ];
 
-    public function member()
+    protected $casts = [
+        'date' => 'date',
+    ];
+
+    public function memberMembership()
     {
-        return $this->belongsTo(Member::class);
+        return $this->belongsTo(MemberMembership::class);
     }
 
-    public function membership()
+    public function getMemberNameAttribute()
     {
-        return $this->belongsTo(Membership::class);
+        return $this->memberMembership?->member?->user?->name;
+    }
+
+    public function getMembershipNameAttribute()
+    {
+        return $this->memberMembership?->membership?->name;
     }
 }

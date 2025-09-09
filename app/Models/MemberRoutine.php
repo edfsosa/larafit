@@ -29,4 +29,39 @@ class MemberRoutine extends Model
     {
         return $this->belongsTo(Trainer::class);
     }
+
+    public function scopeNotStarted($query)
+    {
+        return $query->where('status', 'not_started');
+    }
+
+    public function scopeInProgress($query)
+    {
+        return $query->where('status', 'in_progress');
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
+    }
+
+    public function scopeAssignedTo($query, $memberId)
+    {
+        return $query->where('member_id', $memberId);
+    }
+
+    public function getTrainerNameAttribute()
+    {
+        return $this->trainer?->user?->name;
+    }
+
+    public function getRoutineNameAttribute()
+    {
+        return $this->routine?->name;
+    }
+
+    public function getMemberNameAttribute()
+    {
+        return $this->member?->user?->name;
+    }
 }

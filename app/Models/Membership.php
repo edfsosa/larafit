@@ -16,8 +16,8 @@ class Membership extends Model
     public function members()
     {
         return $this->belongsToMany(Member::class, 'member_memberships')
-                    ->withPivot('start_date', 'end_date', 'status')
-                    ->withTimestamps();
+            ->withPivot('start_date', 'end_date', 'status')
+            ->withTimestamps();
     }
 
     public function memberMemberships()
@@ -28,5 +28,23 @@ class Membership extends Model
     public function payments()
     {
         return $this->hasManyThrough(Payment::class, MemberMembership::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereHas('members', function ($q) {
+            $q->wherePivot('status', 'active')
+                ->wherePivot('end_date', '>=', now());
+        });
+    }
+
+    public function getDurationInWeeksAttribute()
+    {
+        return round($this->duration_days / 7, 2);
+    }
+
+    public function getDurationInMonthsAttribute()
+    {
+        return round($this->duration_days / 30, 2);
     }
 }

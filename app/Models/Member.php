@@ -3,10 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Member extends Model
 {
@@ -20,44 +16,50 @@ class Member extends Model
         'status',
     ];
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function memberships(): BelongsToMany
+    public function memberships()
     {
         return $this->belongsToMany(Membership::class, 'member_memberships')
             ->withPivot('start_date', 'end_date', 'status')
             ->withTimestamps();
     }
 
-    public function trainers(): BelongsToMany
+    public function trainers()
     {
         return $this->belongsToMany(Trainer::class, 'member_trainers')
             ->withPivot('assigned_at')
             ->withTimestamps();
     }
 
-    public function payments(): HasMany
+    public function payments()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasManyThrough(Payment::class, MemberMembership::class);
     }
 
-    public function attendances(): MorphMany
+    public function attendances()
     {
         return $this->morphMany(Attendance::class, 'attendable');
     }
 
-    public function routines(): BelongsToMany
+    public function routines()
     {
         return $this->belongsToMany(Routine::class, 'member_routines')
             ->withPivot('assigned_at', 'status', 'notes', 'trainer_id')
             ->withTimestamps();
     }
 
-    public function memberRoutines(): HasMany
+    public function routineAssignments()
     {
-        return $this->hasMany(MemberRoutine::class);
+        return $this->hasMany(MemberRoutine::class)
+            ->with('routine', 'trainer');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->user?->name;
     }
 }

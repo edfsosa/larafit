@@ -18,11 +18,11 @@ class PaymentsTable
                     ->label('Fecha')
                     ->date('d/m/Y')
                     ->sortable(),
-                TextColumn::make('member.user.name')
+                TextColumn::make('memberMembership.member.user.name')
                     ->label('Miembro')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('membership.name')
+                TextColumn::make('memberMembership.membership.name')
                     ->label('Membresía')
                     ->searchable()
                     ->sortable(),

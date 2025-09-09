@@ -63,44 +63,36 @@
                 </div>
             </div>
 
-            {{-- Date info --}}
-            {{--             <div class="flex justify-between items-center mb-4 text-sm text-gray-600">
+            {{-- Assigned at --}}
+            <div class="flex justify-between items-center mb-4 text-sm text-gray-600">
                 <div>
-                    <span class="font-medium">Último:</span>
-                    {{ $routine->last_completed_at ? $routine->last_completed_at->format('Y-m-d') : 'Nunca' }}
-                </div>
-                <div>
-                    <span class="font-medium">Próximo:</span>
-                    {{ $routine->next_scheduled_at ? $routine->next_scheduled_at->format('Y-m-d') : 'Sin programar' }}
-                </div>
-            </div> --}}
-
-            {{-- Action buttons --}}
-            {{--             <div class="flex gap-2 mb-4">
-                <button wire:click="startRoutine"
-                    class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                    {{ $routine->progress > 0 ? 'Continuar' : 'Iniciar' }}
-                </button>
-
-                @if ($routine->progress === 100)
-                    <button class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-medium">
-                        Completada
-                    </button>
-                @endif
-            </div> --}}
-
-            {{-- Exercises info --}}
-            <div class="border-t border-gray-100 pt-4">
-                <div class="flex items-center justify-between text-gray-600">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                        <span class="text-sm">{{ $routine->exercises->count() }} ejercicios</span>
-                    </div>
+                    <span class="font-medium">Fecha de asignación:</span> {{ $routine->assigned_at }}
                 </div>
             </div>
+
+            {{-- Toggle exercises button --}}
+            <button wire:click="toggleExercises"
+                class="w-full flex items-center justify-center gap-2 py-2 text-gray-600 hover:text-gray-800 transition-colors border-t border-gray-100 pt-4">
+                <span>Ver ejercicios</span>
+                <svg class="w-4 h-4 transform transition-transform {{ $showExercises ? 'rotate-180' : '' }}"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <polyline points="6,9 12,15 18,9" />
+                </svg>
+            </button>
+
+            {{-- Exercises list (collapsible) --}}
+            @if ($showExercises)
+                <div class="mt-4 space-y-2 border-t border-gray-100 pt-4" wire:transition>
+                    @foreach ($routine->exercises as $exercise)
+                        <div class="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm font-medium">{{ $exercise->name }}</span>
+                            <span
+                                class="text-sm text-gray-500">{{ $exercise->pivot->reps }}x{{ $exercise->pivot->sets }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
         </div>
     @endforeach
 </div>

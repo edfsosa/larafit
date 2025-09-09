@@ -16,8 +16,34 @@ class EquipmentMaintenance extends Model
         'cost',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+        'cost' => 'decimal:2',
+    ];
+
     public function equipment()
     {
         return $this->belongsTo(Equipment::class);
     }
+
+    public function scopePreventive($query)
+    {
+        return $query->where('type', 'preventive');
+    }
+
+    public function scopeRepair($query)
+    {
+        return $query->where('type', 'repair');
+    }
+
+    public function scopeInspection($query)
+    {
+        return $query->where('type', 'inspection');
+    }
+
+    public function getEquipmentNameAttribute()
+    {
+        return $this->equipment?->name;
+    }
+
 }

@@ -21,4 +21,14 @@ class MemberTrainer extends Model
     {
         return $this->belongsTo(Trainer::class);
     }
+
+    public function getMemberNameAttribute()
+    {
+        return $this->member?->user?->name;
+    }
+
+    public function getTrainerNameAttribute()
+    {
+        return $this->trainer?->user?->name;
+    }
 }
