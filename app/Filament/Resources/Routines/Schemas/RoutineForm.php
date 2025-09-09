@@ -16,6 +16,8 @@ class RoutineForm
             ->components([
                 TextInput::make('name')
                     ->label('Nombre')
+                    ->placeholder('Nombre de la rutina, ej. "Rutina de fuerza para principiantes"')
+                    ->maxLength(255)
                     ->required(),
                 Select::make('difficulty')
                     ->label('Dificultad')
@@ -26,14 +28,14 @@ class RoutineForm
                     ])
                     ->native(false)
                     ->required(),
-                Select::make('trainer_id')
-                    ->label('Entrenador')
-                    ->relationship('trainer', 'id')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->user->name)
-                    ->searchable()
-                    ->preload()
-                    ->native(false)
-                    ->required(),
+                TextInput::make('duration_minutes')
+                    ->label('Duración (minutos)')
+                    ->placeholder('Duración estimada de la rutina en minutos, ej. 60')
+                    ->numeric()
+                    ->minValue(1)
+                    ->maxValue(300)
+                    ->step(1)
+                    ->nullable(),
                 Toggle::make('is_active')
                     ->label('Activo')
                     ->default(true)
@@ -42,7 +44,9 @@ class RoutineForm
                     ->required(),
                 Textarea::make('description')
                     ->label('Descripción')
+                    ->placeholder('Descripción de la rutina, ej. "Esta rutina está diseñada para..."')
                     ->rows(3)
+                    ->maxLength(1000)
                     ->columnSpanFull()
                     ->nullable(),
             ])

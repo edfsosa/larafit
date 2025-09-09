@@ -17,6 +17,7 @@ class UsersTable
             ->columns([
                 ImageColumn::make('avatar')
                     ->label('Avatar')
+                    ->disk('public')
                     ->circular(),
                 TextColumn::make('name')
                     ->label('Nombre completo')

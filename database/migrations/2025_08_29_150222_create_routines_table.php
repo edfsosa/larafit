@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->enum('difficulty', ['beginner', 'intermediate', 'advanced']);
+            $table->integer('duration_minutes')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->foreignId('trainer_id')->constrained('trainers')->cascadeOnDelete();
             $table->timestamps();
         });
     }

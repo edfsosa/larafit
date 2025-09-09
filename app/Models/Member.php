@@ -52,7 +52,12 @@ class Member extends Model
     public function routines(): BelongsToMany
     {
         return $this->belongsToMany(Routine::class, 'member_routines')
-            ->withPivot('assigned_at', 'estimated_time', 'status', 'assigned_by')
+            ->withPivot('assigned_at', 'status', 'notes', 'trainer_id')
             ->withTimestamps();
+    }
+
+    public function memberRoutines(): HasMany
+    {
+        return $this->hasMany(MemberRoutine::class);
     }
 }

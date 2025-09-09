@@ -33,7 +33,6 @@ class TrainerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\RoutinesRelationManager::class,
             RelationManagers\MemberRoutinesRelationManager::class,
         ];
     }

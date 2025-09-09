@@ -16,20 +16,28 @@ class ExerciseForm
             ->components([
                 TextInput::make('name')
                     ->label('Nombre')
+                    ->placeholder('Nombre del ejercicio, ej. Sentadilla')
+                    ->maxLength(255)
                     ->required(),
                 TextInput::make('video_url')
                     ->label('URL del video')
+                    ->placeholder('URL del video del ejercicio, ej. https://www.youtube.com/watch?v=example')
                     ->url()
                     ->default(null),
-                Select::make('difficulty')
-                    ->label('Dificultad')
+                Select::make('muscle_group')
+                    ->label('Grupo muscular')
                     ->options([
-                        'beginner' => 'Principiante',
-                        'intermediate' => 'Intermedio',
-                        'advanced' => 'Avanzado',
+                        'legs' => 'Piernas',
+                        'arms' => 'Brazos',
+                        'back' => 'Espalda',
+                        'chest' => 'Pecho',
+                        'shoulders' => 'Hombros',
+                        'core' => 'Core',
+                        'full_body' => 'Cuerpo completo',
+                        'other' => 'Otro',
                     ])
                     ->native(false)
-                    ->default('beginner')
+                    ->default('full_body')
                     ->required(),
                 Select::make('type')
                     ->label('Tipo')
@@ -46,6 +54,9 @@ class ExerciseForm
                     ->required(),
                 Textarea::make('description')
                     ->label('Descripción')
+                    ->placeholder('Descripción del ejercicio, ej. La sentadilla es un ejercicio de fuerza que trabaja principalmente los músculos de las piernas y glúteos.')
+                    ->rows(3)
+                    ->maxLength(1000)
                     ->default(null)
                     ->columnSpanFull(),
                 FileUpload::make('image')

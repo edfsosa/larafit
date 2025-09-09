@@ -10,26 +10,21 @@ class Routine extends Model
         'name',
         'description',
         'difficulty',
+        'duration_minutes',
         'is_active',
-        'trainer_id',
     ];
 
     public function exercises()
     {
         return $this->belongsToMany(Exercise::class, 'exercise_routines')
-                    ->withPivot('sets', 'reps', 'rest_seconds', 'instructions')
-                    ->withTimestamps();
+            ->withPivot('sets', 'reps', 'rest_seconds', 'duration_seconds', 'order', 'instructions')
+            ->withTimestamps();
     }
 
     public function members()
     {
         return $this->belongsToMany(Member::class, 'member_routines')
-                    ->withPivot('assigned_at')
-                    ->withTimestamps();
-    }
-
-    public function trainer()
-    {
-        return $this->belongsTo(Trainer::class);
+            ->withPivot('assigned_at', 'status', 'notes', 'trainer_id')
+            ->withTimestamps();
     }
 }

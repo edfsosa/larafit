@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('exercise_id')->constrained()->cascadeOnDelete();
             $table->foreignId('routine_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('equipment_id')->nullable()->constrained()->nullOnDelete();
             $table->integer('sets')->default(3);
             $table->integer('reps')->default(10);
             $table->integer('rest_seconds')->default(60);
+            $table->integer('duration_seconds')->nullable();
+            $table->integer('order')->default(1);
             $table->text('instructions')->nullable();
             $table->unique(['exercise_id', 'routine_id']);
             $table->timestamps();

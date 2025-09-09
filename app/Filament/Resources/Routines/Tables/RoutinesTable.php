@@ -36,9 +36,8 @@ class RoutinesTable
                     })
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('trainer.user.name')
-                    ->label('Entrenador')
-                    ->searchable()
+                TextColumn::make('duration_minutes')
+                    ->label('Duración (min)')
                     ->sortable(),
                 ToggleColumn::make('is_active')
                     ->label('Activo')

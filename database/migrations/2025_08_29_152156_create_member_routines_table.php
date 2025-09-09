@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('member_id')->constrained()->cascadeOnDelete();
             $table->foreignId('routine_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('assigned_by')->nullable()->constrained('trainers')->nullOnDelete();
-            $table->dateTime('assigned_at')->nullable();
-            $table->integer('estimated_time')->nullable();
+            $table->foreignId('trainer_id')->nullable()->constrained()->nullOnDelete();
+            $table->date('assigned_at')->nullable();
             $table->enum('status', ['not_started', 'in_progress', 'completed'])->default('not_started');
+            $table->text('notes')->nullable();
             $table->timestamps();
-            $table->index(['member_id','routine_id','status']);
+            $table->index(['member_id', 'routine_id']);
         });
     }
 

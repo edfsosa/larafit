@@ -16,57 +16,118 @@ class ExerciseRoutineSeeder extends Seeder
      */
     public function run(): void
     {
-        // Generar 10 ejercicios de ejemplo
         $exercises = [
-            ['name' => 'Push-up', 'description' => 'A basic upper body exercise.', 'difficulty' => 'beginner', 'type' => 'strength'],
-            ['name' => 'Squat', 'description' => 'A fundamental lower body exercise.', 'difficulty' => 'beginner', 'type' => 'strength'],
-            ['name' => 'Jumping Jack', 'description' => 'A cardio exercise to get your heart rate up.', 'difficulty' => 'beginner', 'type' => 'cardio'],
-            ['name' => 'Plank', 'description' => 'Core strengthening exercise.', 'difficulty' => 'intermediate', 'type' => 'strength'],
-            ['name' => 'Lunge', 'description' => 'Great for leg strength and balance.', 'difficulty' => 'intermediate', 'type' => 'strength'],
-            ['name' => 'Burpee', 'description' => 'Full body exercise that increases heart rate.', 'difficulty' => 'advanced', 'type' => 'cardio'],
-            ['name' => 'Mountain Climber', 'description' => 'Cardio exercise that targets multiple muscle groups.', 'difficulty' => 'advanced', 'type' => 'cardio'],
-            ['name' => 'Deadlift', 'description' => 'Strength training exercise for the back and legs.', 'difficulty' => 'advanced', 'type' => 'strength'],
-            ['name' => 'Bench Press', 'description' => 'Upper body strength exercise focusing on the chest.', 'difficulty' => 'intermediate', 'type' => 'strength'],
-            ['name' => 'Bicep Curl', 'description' => 'Isolation exercise for the biceps.', 'difficulty' => 'beginner', 'type' => 'strength'],
-            ['name' => 'Tricep Dip', 'description' => 'Exercise targeting the triceps muscles.', 'difficulty' => 'beginner', 'type' => 'strength'],
-            ['name' => 'Leg Press', 'description' => 'Machine-based exercise for leg strength.', 'difficulty' => 'intermediate', 'type' => 'strength'],
-            ['name' => 'Shoulder Press', 'description' => 'Exercise to strengthen the shoulder muscles.', 'difficulty' => 'intermediate', 'type' => 'strength'],
-            ['name' => 'Pull-up', 'description' => 'Upper body exercise that targets the back and biceps.', 'difficulty' => 'advanced', 'type' => 'strength'],
-            ['name' => 'Sit-up', 'description' => 'Core exercise to strengthen abdominal muscles.', 'difficulty' => 'beginner', 'type' => 'strength'],
-            ['name' => 'Russian Twist', 'description' => 'Core exercise that targets the obliques.', 'difficulty' => 'intermediate', 'type' => 'strength'],
-            ['name' => 'High Knees', 'description' => 'Cardio exercise that involves running in place with high knee lifts.', 'difficulty' => 'beginner', 'type' => 'cardio'],
-            ['name' => 'Butt Kicks', 'description' => 'Cardio exercise that involves running in place while kicking your heels towards your glutes.', 'difficulty' => 'beginner', 'type' => 'cardio'],
-            ['name' => 'Jump Rope', 'description' => 'Cardio exercise that improves coordination and cardiovascular health.', 'difficulty' => 'intermediate', 'type' => 'cardio'],
-            ['name' => 'Cycling', 'description' => 'Low-impact cardio exercise that strengthens the legs and improves cardiovascular health.', 'difficulty' => 'beginner', 'type' => 'cardio'],
+            [
+                'name' => 'Push-Up',
+                'description' => 'A basic upper body strength exercise.',
+                'type' => 'strength',
+                'muscle_group' => 'chest',
+                'video_url' => 'https://example.com/push_up_video',
+            ],
+            [
+                'name' => 'Squat',
+                'description' => 'A fundamental lower body exercise.',
+                'type' => 'strength',
+                'muscle_group' => 'legs',
+                'video_url' => 'https://example.com/squat_video',
+            ],
+            [
+                'name' => 'Plank',
+                'description' => 'Core strengthening exercise.',
+                'type' => 'strength',
+                'muscle_group' => 'core',
+                'video_url' => 'https://example.com/plank_video',
+            ],
+            [
+                'name' => 'Jumping Jacks',
+                'description' => 'A full-body cardio exercise.',
+                'type' => 'cardio',
+                'muscle_group' => 'full_body',
+                'video_url' => 'https://example.com/jumping_jacks_video',
+            ],
+            [
+                'name' => 'Lunges',
+                'description' => 'A lower body strength exercise.',
+                'type' => 'strength',
+                'muscle_group' => 'legs',
+                'video_url' => 'https://example.com/lunges_video',
+            ],
+            [
+                'name' => 'Burpees',
+                'description' => 'A high-intensity full-body exercise.',
+                'type' => 'cardio',
+                'muscle_group' => 'full_body',
+                'video_url' => null,
+            ],
+            [
+                'name' => "Bicep Curl",
+                "description" => "An isolation exercise for the biceps.",
+                "type" => "strength",
+                "muscle_group" => "arms",
+                "video_url" => "https://example.com/bicep_curl_video",
+            ],
+            [
+                'name' => "Tricep Dip",
+                "description" => "An exercise targeting the triceps.",
+                "type" => "strength",
+                "muscle_group" => "arms",
+                "video_url" => "https://example.com/tricep_dip_video",
+            ],
+            [
+                'name' => "Mountain Climbers",
+                "description" => "A cardio exercise that also engages the core.",
+                "type" => "cardio",
+                "muscle_group" => "core",
+                "video_url" => null,
+            ],
+            [
+                'name' => "Deadlift",
+                "description" => "A compound exercise targeting multiple muscle groups.",
+                "type" => "strength",
+                "muscle_group" => "back",
+                "video_url" => "https://example.com/deadlift_video",
+            ],
         ];
 
         foreach ($exercises as $exercise) {
             Exercise::create($exercise);
         }
 
-        $trainers = Trainer::all();
-
         $routines = [
             [
                 'name' => 'Full Body Beginner',
                 'description' => 'A beginner-friendly full body workout routine.',
                 'difficulty' => 'beginner',
+                'duration_minutes' => 30,
                 'is_active' => true,
-                'trainer_id' => $trainers->random()->id,
             ],
             [
                 'name' => 'Upper Body Strength',
-                'description' => 'Focus on building upper body strength with this routine.',
+                'description' => 'Focus on building upper body strength.',
                 'difficulty' => 'intermediate',
+                'duration_minutes' => 45,
                 'is_active' => true,
-                'trainer_id' => $trainers->random()->id,
             ],
             [
-                'name' => 'Advanced HIIT',
-                'description' => 'High-intensity interval training for advanced users.',
+                'name' => 'Cardio Blast',
+                'description' => 'High-intensity cardio routine to burn calories.',
                 'difficulty' => 'advanced',
+                'duration_minutes' => 20,
                 'is_active' => true,
-                'trainer_id' => $trainers->random()->id,
+            ],
+            [
+                'name' => 'Core Focus',
+                'description' => 'Strengthen your core with this targeted routine.',
+                'difficulty' => 'intermediate',
+                'duration_minutes' => 30,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Leg Day',
+                'description' => 'A routine dedicated to lower body strength.',
+                'difficulty' => 'advanced',
+                'duration_minutes' => 40,
+                'is_active' => true,
             ],
         ];
 

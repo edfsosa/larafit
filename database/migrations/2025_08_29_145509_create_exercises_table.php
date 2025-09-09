@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->enum('difficulty', ['beginner', 'intermediate', 'advanced'])->default('beginner');
             $table->enum('type', ['cardio', 'strength', 'flexibility', 'balance', 'mobility', 'other'])->default('strength');
+            $table->enum('muscle_group', ['chest', 'back', 'legs', 'arms', 'shoulders', 'core', 'full_body', 'other'])->default('full_body');
             $table->string('image')->nullable();
             $table->string('video_url')->nullable();
             $table->timestamps();

@@ -40,6 +40,16 @@ class ExercisesRelationManager extends RelationManager
                     ->numeric()
                     ->minValue(0)
                     ->required(),
+                TextInput::make('duration_seconds')
+                    ->label('Duración (s)')
+                    ->numeric()
+                    ->minValue(0)
+                    ->nullable(),
+                TextInput::make('order')
+                    ->label('Orden')
+                    ->numeric()
+                    ->minValue(1)
+                    ->required(),
                 Textarea::make('instructions')
                     ->label('Instrucciones')
                     ->rows(3)
@@ -54,23 +64,6 @@ class ExercisesRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('name')
                     ->label('Nombre')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('difficulty')
-                    ->label('Dificultad')
-                    ->badge()
-                    ->color(fn($state) => match ($state) {
-                        'beginner' => 'success',
-                        'intermediate' => 'warning',
-                        'advanced' => 'danger',
-                        default => 'secondary',
-                    })
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'beginner' => 'Principiante',
-                        'intermediate' => 'Intermedio',
-                        'advanced' => 'Avanzado',
-                        default => $state,
-                    })
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('type')
@@ -94,6 +87,12 @@ class ExercisesRelationManager extends RelationManager
                     ->sortable(),
                 TextColumn::make('pivot.rest_seconds')
                     ->label('Descanso (s)')
+                    ->sortable(),
+                TextColumn::make('pivot.duration_seconds')
+                    ->label('Duración (s)')
+                    ->sortable(),
+                TextColumn::make('pivot.order')
+                    ->label('Orden')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Creado')

@@ -31,11 +31,13 @@ class Trainer extends Model
 
     public function routines()
     {
-        return $this->hasMany(Routine::class);
+        return $this->belongsToMany(Routine::class, 'member_routines')
+            ->withPivot('assigned_at', 'status', 'notes', 'member_id')
+            ->withTimestamps();
     }
 
     public function memberRoutines()
     {
-        return $this->hasMany(MemberRoutine::class, 'assigned_by');
+        return $this->hasMany(MemberRoutine::class);
     }
 }

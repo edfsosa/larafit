@@ -32,11 +32,6 @@ class RoutinesRelationManager extends RelationManager
                     ->native(false)
                     ->closeOnDateSelection()
                     ->required(),
-                TextInput::make('estimated_time')
-                    ->label('Tiempo Estimado (min)')
-                    ->numeric()
-                    ->minValue(1)
-                    ->required(),
                 Select::make('status')
                     ->label('Estado')
                     ->options([
@@ -47,8 +42,8 @@ class RoutinesRelationManager extends RelationManager
                     ->native(false)
                     ->default('not_started')
                     ->required(),
-                Select::make('assigned_by')
-                    ->label('Asignado Por')
+                Select::make('trainer_id')
+                    ->label('Entrenador')
                     ->options(function () {
                         return \App\Models\Trainer::all()->pluck('user.name', 'id');
                     })
@@ -72,9 +67,6 @@ class RoutinesRelationManager extends RelationManager
                     ->label('Asignado')
                     ->date('d/m/Y')
                     ->sortable(),
-                TextColumn::make('pivot.estimated_time')
-                    ->label('Tiempo Estimado (min)')
-                    ->sortable(),
                 TextColumn::make('pivot.status')
                     ->label('Estado')
                     ->badge()
@@ -92,8 +84,8 @@ class RoutinesRelationManager extends RelationManager
                     })
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('pivot.assigned_by')
-                    ->label('Entrenador asignado')
+                TextColumn::make('pivot.trainer_id')
+                    ->label('Entrenador')
                     ->formatStateUsing(fn($state) => Trainer::find($state)?->user->name ?? 'N/A')
                     ->searchable()
                     ->sortable(),

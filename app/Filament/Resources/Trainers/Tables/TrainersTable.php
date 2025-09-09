@@ -32,6 +32,16 @@ class TrainersTable
                     ->sortable(),
                 TextColumn::make('specialty')
                     ->label('Especialidad')
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'strength_training' => 'Entrenamiento de fuerza',
+                        'cardio' => 'Cardio',
+                        'yoga' => 'Yoga',
+                        'pilates' => 'Pilates',
+                        'nutrition' => 'Nutrición',
+                        'crossfit' => 'CrossFit',
+                        'other' => 'Otro',
+                        default => $state,
+                    })
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')

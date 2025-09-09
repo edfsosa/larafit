@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Exercises\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -22,19 +23,17 @@ class ExercisesTable
                     ->label('Nombre')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('difficulty')
-                    ->label('Dificultad')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'beginner' => 'success',
-                        'intermediate' => 'warning',
-                        'advanced' => 'danger',
-                        default => 'primary',
-                    })
+                TextColumn::make('muscle_group')
+                    ->label('Grupo muscular')
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'beginner' => 'Principiante',
-                        'intermediate' => 'Intermedio',
-                        'advanced' => 'Avanzado',
+                        'chest' => 'Pecho',
+                        'back' => 'Espalda',
+                        'legs' => 'Piernas',
+                        'arms' => 'Brazos',
+                        'shoulders' => 'Hombros',
+                        'core' => 'Core',
+                        'full_body' => 'Cuerpo completo',
+                        'other' => 'Otro',
                         default => $state,
                     })
                     ->searchable()
@@ -50,10 +49,6 @@ class ExercisesTable
                         'other' => 'Otro',
                         default => $state,
                     })
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('video_url')
-                    ->label('URL del video')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
@@ -72,6 +67,12 @@ class ExercisesTable
             ])
             ->recordActions([
                 EditAction::make(),
+                Action::make('view-video')
+                    ->label('Ver video')
+                    ->url(fn ($record) => $record->video_url)
+                    ->openUrlInNewTab()
+                    ->icon('heroicon-o-play')
+                    ->visible(fn ($record) => !empty($record->video_url)),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

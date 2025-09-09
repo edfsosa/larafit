@@ -9,8 +9,8 @@ class Exercise extends Model
     protected $fillable = [
         'name',
         'description',
-        'difficulty',
         'type',
+        'muscle_group',
         'image',
         'video_url',
     ];
@@ -18,7 +18,7 @@ class Exercise extends Model
     public function routines()
     {
         return $this->belongsToMany(Routine::class, 'exercise_routines')
-                    ->withPivot('sets', 'reps', 'rest_seconds', 'instructions')
+                    ->withPivot('sets', 'reps', 'rest_seconds', 'duration_seconds', 'order', 'instructions')
                     ->withTimestamps();
     }
 }

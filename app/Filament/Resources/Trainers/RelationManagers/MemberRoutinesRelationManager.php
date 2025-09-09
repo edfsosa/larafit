@@ -12,6 +12,7 @@ use Filament\Actions\DissociateBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
@@ -47,11 +48,6 @@ class MemberRoutinesRelationManager extends RelationManager
                     ->native(false)
                     ->closeOnDateSelection()
                     ->required(),
-                TextInput::make('estimated_time')
-                    ->label('Tiempo Estimado (min)')
-                    ->numeric()
-                    ->minValue(1)
-                    ->required(),
                 Select::make('status')
                     ->label('Estado')
                     ->options([
@@ -62,6 +58,12 @@ class MemberRoutinesRelationManager extends RelationManager
                     ->native(false)
                     ->default('not_started')
                     ->required(),
+                Textarea::make('notes')
+                    ->label('Notas')
+                    ->rows(3)
+                    ->maxLength(1000)
+                    ->columnSpanFull()
+                    ->nullable(),
             ]);
     }
 
@@ -80,9 +82,6 @@ class MemberRoutinesRelationManager extends RelationManager
                 TextColumn::make('assigned_at')
                     ->label('Asignado')
                     ->date('d/m/Y')
-                    ->sortable(),
-                TextColumn::make('estimated_time')
-                    ->label('Tiempo Estimado (min)')
                     ->sortable(),
                 TextColumn::make('status')
                     ->label('Estado')
