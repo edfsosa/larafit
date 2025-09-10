@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('member_id')->constrained()->cascadeOnDelete();
             $table->foreignId('trainer_id')->constrained()->cascadeOnDelete();
-            $table->date('assigned_at');
+            $table->dateTime('assigned_at');
             $table->timestamps();
         });
     }

@@ -13,6 +13,11 @@ class Membership extends Model
         'duration_days',
     ];
 
+    protected $casts = [
+        'price' => 'decimal:2',
+        'duration_days' => 'integer',
+    ];
+
     public function members()
     {
         return $this->belongsToMany(Member::class, 'member_memberships')

@@ -16,6 +16,12 @@ class Member extends Model
         'status',
     ];
 
+    protected $casts = [
+        'joined_at' => 'date',
+        'height' => 'decimal:2',
+        'weight' => 'decimal:2',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

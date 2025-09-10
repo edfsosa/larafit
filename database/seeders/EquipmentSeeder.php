@@ -47,7 +47,7 @@ class EquipmentSeeder extends Seeder
             [
                 'equipment_id' => 1,
                 'date' => '2023-06-01',
-                'type' => 'routine',
+                'type' => 'preventive',
                 'description' => 'Mantenimiento preventivo anual.',
                 'cost' => 150000.00,
             ],

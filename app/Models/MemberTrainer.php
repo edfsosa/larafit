@@ -12,6 +12,10 @@ class MemberTrainer extends Model
         'assigned_at'
     ];
 
+    protected $casts = [
+        'assigned_at' => 'datetime',
+    ];
+
     public function member()
     {
         return $this->belongsTo(Member::class);

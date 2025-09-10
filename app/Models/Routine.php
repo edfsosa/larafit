@@ -14,6 +14,11 @@ class Routine extends Model
         'is_active',
     ];
 
+    protected $casts = [
+        'duration_minutes' => 'integer',
+        'is_active' => 'boolean',
+    ];
+
     public function exercises()
     {
         return $this->belongsToMany(Exercise::class, 'exercise_routines')
