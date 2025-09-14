@@ -14,14 +14,21 @@ class ExerciseForm
     {
         return $schema
             ->components([
+                FileUpload::make('image')
+                    ->label('Imagen')
+                    ->image()
+                    ->imageEditor()
+                    ->disk('public')
+                    ->directory('exercises/images')
+                    ->default(null)
+                    ->columnSpanFull()
+                    ->maxSize(1024),
                 TextInput::make('name')
                     ->label('Nombre')
-                    ->placeholder('Nombre del ejercicio, ej. Sentadilla')
                     ->maxLength(255)
                     ->required(),
                 TextInput::make('video_url')
                     ->label('URL del video')
-                    ->placeholder('URL del video del ejercicio, ej. https://www.youtube.com/watch?v=example')
                     ->url()
                     ->default(null),
                 Select::make('muscle_group')
@@ -37,7 +44,6 @@ class ExerciseForm
                         'other' => 'Otro',
                     ])
                     ->native(false)
-                    ->default('full_body')
                     ->required(),
                 Select::make('type')
                     ->label('Tipo')
@@ -50,24 +56,13 @@ class ExerciseForm
                         'other' => 'Otro',
                     ])
                     ->native(false)
-                    ->default('strength')
                     ->required(),
                 Textarea::make('description')
                     ->label('Descripción')
-                    ->placeholder('Descripción del ejercicio, ej. La sentadilla es un ejercicio de fuerza que trabaja principalmente los músculos de las piernas y glúteos.')
                     ->rows(3)
                     ->maxLength(1000)
                     ->default(null)
                     ->columnSpanFull(),
-                FileUpload::make('image')
-                    ->label('Imagen')
-                    ->image()
-                    ->imageEditor()
-                    ->disk('public')
-                    ->directory('exercises/images')
-                    ->default(null)
-                    ->columnSpanFull()
-                    ->maxSize(1024),
             ]);
     }
 }

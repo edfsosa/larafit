@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Trainers\RelationManagers;
 
+use App\Models\Member;
 use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -17,11 +18,13 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class MemberRoutinesRelationManager extends RelationManager
 {
     protected static string $relationship = 'memberRoutines';
+    protected static ?string $title = 'Rutinas Asignadas';
 
     public function form(Schema $schema): Schema
     {
@@ -30,7 +33,10 @@ class MemberRoutinesRelationManager extends RelationManager
                 Select::make('member_id')
                     ->label('Miembro')
                     ->options(function () {
-                        return \App\Models\Member::all()->pluck('user.name', 'id');
+                        return Member::where('status', 'active')
+                            ->with('user')
+                            ->get()
+                            ->pluck('user.name', 'id');
                     })
                     ->native(false)
                     ->searchable()
@@ -46,7 +52,9 @@ class MemberRoutinesRelationManager extends RelationManager
                 DatePicker::make('assigned_at')
                     ->label('Fecha de Asignación')
                     ->native(false)
+                    ->displayFormat('d/m/Y')
                     ->closeOnDateSelection()
+                    ->default(now())
                     ->required(),
                 Select::make('status')
                     ->label('Estado')
@@ -112,10 +120,18 @@ class MemberRoutinesRelationManager extends RelationManager
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->label('Estado')
+                    ->options([
+                        'not_started' => 'No Iniciada',
+                        'in_progress' => 'En Progreso',
+                        'completed' => 'Completada',
+                    ])
+                    ->multiple(),
             ])
             ->headerActions([
-                CreateAction::make(),
+                CreateAction::make()
+                    ->label('Asignar Rutina'),
             ])
             ->recordActions([
                 EditAction::make(),

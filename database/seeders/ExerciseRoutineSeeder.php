@@ -18,74 +18,64 @@ class ExerciseRoutineSeeder extends Seeder
     {
         $exercises = [
             [
-                'name' => 'Push-Up',
-                'description' => 'A basic upper body strength exercise.',
+                'name' => 'Sentadilla con barra',
+                'description' => 'Ejercicio de fuerza para tren inferior enfocado en cuádriceps y glúteos.',
+                'type' => 'strength',
+                'muscle_group' => 'legs',
+            ],
+            [
+                'name' => 'Press de banca',
+                'description' => 'Ejercicio de fuerza que trabaja principalmente el pecho y tríceps.',
                 'type' => 'strength',
                 'muscle_group' => 'chest',
-                'video_url' => 'https://example.com/push_up_video',
             ],
             [
-                'name' => 'Squat',
-                'description' => 'A fundamental lower body exercise.',
+                'name' => 'Dominadas',
+                'description' => 'Ejercicio de tracción que fortalece la espalda y bíceps.',
                 'type' => 'strength',
-                'muscle_group' => 'legs',
-                'video_url' => 'https://example.com/squat_video',
+                'muscle_group' => 'back',
             ],
             [
-                'name' => 'Plank',
-                'description' => 'Core strengthening exercise.',
+                'name' => 'Plancha abdominal',
+                'description' => 'Ejercicio isométrico para fortalecer el core.',
                 'type' => 'strength',
                 'muscle_group' => 'core',
-                'video_url' => 'https://example.com/plank_video',
             ],
             [
-                'name' => 'Jumping Jacks',
-                'description' => 'A full-body cardio exercise.',
+                'name' => 'Cinta de correr',
+                'description' => 'Ejercicio cardiovascular para mejorar la resistencia.',
                 'type' => 'cardio',
                 'muscle_group' => 'full_body',
-                'video_url' => 'https://example.com/jumping_jacks_video',
-            ],
-            [
-                'name' => 'Lunges',
-                'description' => 'A lower body strength exercise.',
-                'type' => 'strength',
-                'muscle_group' => 'legs',
-                'video_url' => 'https://example.com/lunges_video',
             ],
             [
                 'name' => 'Burpees',
-                'description' => 'A high-intensity full-body exercise.',
+                'description' => 'Ejercicio de cuerpo completo que combina fuerza y cardio.',
                 'type' => 'cardio',
                 'muscle_group' => 'full_body',
-                'video_url' => null,
             ],
             [
-                'name' => "Bicep Curl",
-                "description" => "An isolation exercise for the biceps.",
-                "type" => "strength",
-                "muscle_group" => "arms",
-                "video_url" => "https://example.com/bicep_curl_video",
+                'name' => 'Estiramiento de isquiotibiales',
+                'description' => 'Ejercicio de flexibilidad para mejorar la movilidad de las piernas.',
+                'type' => 'flexibility',
+                'muscle_group' => 'legs',
             ],
             [
-                'name' => "Tricep Dip",
-                "description" => "An exercise targeting the triceps.",
-                "type" => "strength",
-                "muscle_group" => "arms",
-                "video_url" => "https://example.com/tricep_dip_video",
+                'name' => 'Elevaciones laterales con mancuernas',
+                'description' => 'Ejercicio para fortalecer los deltoides (hombros).',
+                'type' => 'strength',
+                'muscle_group' => 'shoulders',
             ],
             [
-                'name' => "Mountain Climbers",
-                "description" => "A cardio exercise that also engages the core.",
-                "type" => "cardio",
-                "muscle_group" => "core",
-                "video_url" => null,
+                'name' => 'Curl de bíceps con barra',
+                'description' => 'Ejercicio de aislamiento para los bíceps.',
+                'type' => 'strength',
+                'muscle_group' => 'arms',
             ],
             [
-                'name' => "Deadlift",
-                "description" => "A compound exercise targeting multiple muscle groups.",
-                "type" => "strength",
-                "muscle_group" => "back",
-                "video_url" => "https://example.com/deadlift_video",
+                'name' => 'Paseo del granjero',
+                'description' => 'Ejercicio de fuerza funcional y estabilidad.',
+                'type' => 'balance',
+                'muscle_group' => 'core',
             ],
         ];
 
@@ -93,47 +83,52 @@ class ExerciseRoutineSeeder extends Seeder
             Exercise::create($exercise);
         }
 
+        $this->command->info('Ejercicios creados con éxito.');
+
         $routines = [
             [
-                'name' => 'Full Body Beginner',
-                'description' => 'A beginner-friendly full body workout routine.',
+                'name' => 'Rutina Full Body para Principiantes',
+                'description' => 'Entrenamiento de cuerpo completo ideal para quienes se inician en el gimnasio.',
                 'difficulty' => 'beginner',
-                'duration_minutes' => 30,
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Upper Body Strength',
-                'description' => 'Focus on building upper body strength.',
-                'difficulty' => 'intermediate',
                 'duration_minutes' => 45,
-                'is_active' => true,
             ],
             [
-                'name' => 'Cardio Blast',
-                'description' => 'High-intensity cardio routine to burn calories.',
-                'difficulty' => 'advanced',
-                'duration_minutes' => 20,
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Core Focus',
-                'description' => 'Strengthen your core with this targeted routine.',
+                'name' => 'Entrenamiento de Fuerza Intermedio',
+                'description' => 'Rutina centrada en hipertrofia con ejercicios básicos y compuestos.',
                 'difficulty' => 'intermediate',
-                'duration_minutes' => 30,
-                'is_active' => true,
+                'duration_minutes' => 60,
             ],
             [
-                'name' => 'Leg Day',
-                'description' => 'A routine dedicated to lower body strength.',
+                'name' => 'Circuito HIIT de Alta Intensidad',
+                'description' => 'Rutina de cardio intenso para quemar grasa y mejorar resistencia.',
                 'difficulty' => 'advanced',
+                'duration_minutes' => 30,
+            ],
+            [
+                'name' => 'Rutina de Core y Estabilidad',
+                'description' => 'Fortalece el abdomen, zona lumbar y mejora el equilibrio.',
+                'difficulty' => 'intermediate',
                 'duration_minutes' => 40,
-                'is_active' => true,
+            ],
+            [
+                'name' => 'Flexibilidad y Movilidad Articular',
+                'description' => 'Ejercicios suaves para mantener el rango de movimiento y prevenir lesiones.',
+                'difficulty' => 'beginner',
+                'duration_minutes' => 35,
+            ],
+            [
+                'name' => 'Push/Pull para Avanzados',
+                'description' => 'División de empuje y tracción para entrenar seis días por semana.',
+                'difficulty' => 'advanced',
+                'duration_minutes' => 75,
             ],
         ];
 
         foreach ($routines as $routine) {
             Routine::create($routine);
         }
+
+        $this->command->info('Rutinas creadas con éxito.');
 
         // Poblar la tabla pivot exercise_routine
         $allExercises = Exercise::all();
@@ -145,8 +140,11 @@ class ExerciseRoutineSeeder extends Seeder
                 ExerciseRoutine::create([
                     'exercise_id' => $exercise->id,
                     'routine_id' => $routine->id,
-                    'sets' => rand(3, 5),
-                    'reps' => rand(8, 15),
+                    'sets' => rand(2, 4),
+                    'reps' => rand(10, 20),
+                    'rest_seconds' => rand(30, 60),
+                    'duration_seconds' => null,
+                    'order' => rand(1, 10),
                 ]);
             }
         }

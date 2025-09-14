@@ -14,12 +14,18 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class MemberResource extends Resource
 {
     protected static ?string $model = Member::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $navigationLabel = 'Miembros';
+    protected static ?string $modelLabel = 'Miembro';
+    protected static ?string $pluralModelLabel = 'Miembros';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $recordTitleAttribute = 'user.name';
+    protected static string | UnitEnum | null $navigationGroup = 'Miembros';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
     public static function form(Schema $schema): Schema
     {

@@ -1,43 +1,48 @@
 <?php
 
-namespace App\Filament\Resources\Routines\Tables;
+namespace App\Filament\Resources\EquipmentMaintenances\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class RoutinesTable
+class EquipmentMaintenancesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->label('Nombre')
-                    ->searchable()
+                TextColumn::make('equipment.name')
+                    ->label('Equipo')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('date')
+                    ->label('Fecha')
+                    ->date('d/m/Y')
                     ->sortable(),
-                TextColumn::make('difficulty')
-                    ->label('Dificultad')
+                TextColumn::make('type')
+                    ->label('Tipo')
                     ->badge()
-                    ->color(fn($state) => match ($state) {
-                        'beginner' => 'success',
-                        'intermediate' => 'warning',
-                        'advanced' => 'danger',
+                    ->color(fn(string $state): string => match ($state) {
+                        'preventive' => 'success',
+                        'repair' => 'danger',
+                        'inspection' => 'warning',
+                        'other' => 'secondary',
                         default => 'secondary',
                     })
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'beginner' => 'Principiante',
-                        'intermediate' => 'Intermedio',
-                        'advanced' => 'Avanzado',
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'preventive' => 'Preventivo',
+                        'repair' => 'Reparación',
+                        'inspection' => 'Inspección',
+                        'other' => 'Otro',
                         default => $state,
                     })
-                    ->searchable()
                     ->sortable(),
-                TextColumn::make('duration_minutes')
-                    ->label('Duración (min)')
+                TextColumn::make('cost')
+                    ->label('Costo')
+                    ->money('PYG', true)
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Creado')
@@ -51,15 +56,7 @@ class RoutinesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('difficulty')
-                    ->label('Dificultad')
-                    ->options([
-                        'beginner' => 'Principiante',
-                        'intermediate' => 'Intermedio',
-                        'advanced' => 'Avanzado',
-                    ])
-                    ->multiple()
-                    ->native(false),
+                //
             ])
             ->recordActions([
                 EditAction::make(),

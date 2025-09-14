@@ -16,9 +16,7 @@ class TrainerForm
                 Select::make('user_id')
                     ->label('Usuario')
                     ->relationship('user', 'name')
-                    ->preload()
-                    ->searchable()
-                    ->native(false)
+                    ->disabled()
                     ->required(),
                 Select::make('specialty')
                     ->label('Especialidad')
@@ -31,11 +29,13 @@ class TrainerForm
                         'crossfit' => 'CrossFit',
                     ])
                     ->native(false)
-                    ->default(null),
+                    ->required(),
                 Textarea::make('bio')
                     ->label('Biografía')
-                    ->default(null)
-                    ->columnSpanFull(),
+                    ->rows(3)
+                    ->maxLength(1000)
+                    ->columnSpanFull()
+                    ->nullable(),
             ]);
     }
 }

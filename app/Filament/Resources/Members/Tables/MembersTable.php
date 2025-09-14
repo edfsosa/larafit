@@ -14,13 +14,23 @@ class MembersTable
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->numeric()
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('user.document_number')
                     ->label('Documento')
+                    ->numeric()
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('user.name')
                     ->label('Nombre')
                     ->searchable()
+                    ->sortable(),
+                TextColumn::make('age')
+                    ->label('Edad')
+                    ->getStateUsing(fn ($record) => $record->user->birth_date ? $record->user->birth_date->age : 'N/A')
                     ->sortable(),
                 TextColumn::make('user.phone')
                     ->label('Teléfono')
@@ -29,10 +39,6 @@ class MembersTable
                 TextColumn::make('user.email')
                     ->label('Correo electrónico')
                     ->searchable()
-                    ->sortable(),
-                TextColumn::make('joined_at')
-                    ->label('Ingreso')
-                    ->date('d/m/Y')
                     ->sortable(),
                 TextColumn::make('status')
                     ->label('Estado')

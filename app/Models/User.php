@@ -109,4 +109,15 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasRole('Admin');
     }
+
+    /**
+     * Calcular la edad del usuario a partir de su fecha de nacimiento
+     */
+    public function age()
+    {
+        if (!$this->birth_date) {
+            return null;
+        }
+        return now()->diffInYears($this->birth_date);
+    }
 }

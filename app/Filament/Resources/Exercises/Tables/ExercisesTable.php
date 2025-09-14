@@ -8,6 +8,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class ExercisesTable
@@ -36,7 +37,6 @@ class ExercisesTable
                         'other' => 'Otro',
                         default => $state,
                     })
-                    ->searchable()
                     ->sortable(),
                 TextColumn::make('type')
                     ->label('Tipo')
@@ -49,7 +49,6 @@ class ExercisesTable
                         'other' => 'Otro',
                         default => $state,
                     })
-                    ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Creado')
@@ -63,7 +62,32 @@ class ExercisesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('muscle_group')
+                    ->label('Grupo muscular')
+                    ->options([
+                        'legs' => 'Piernas',
+                        'arms' => 'Brazos',
+                        'back' => 'Espalda',
+                        'chest' => 'Pecho',
+                        'shoulders' => 'Hombros',
+                        'core' => 'Core',
+                        'full_body' => 'Cuerpo completo',
+                        'other' => 'Otro',
+                    ])
+                    ->multiple()
+                    ->native(false),
+                SelectFilter::make('type')
+                    ->label('Tipo')
+                    ->options([
+                        'cardio' => 'Cardio',
+                        'strength' => 'Fuerza',
+                        'flexibility' => 'Flexibilidad',
+                        'balance' => 'Equilibrio',
+                        'mobility' => 'Movilidad',
+                        'other' => 'Otro',
+                    ])
+                    ->multiple()
+                    ->native(false),
             ])
             ->recordActions([
                 EditAction::make(),

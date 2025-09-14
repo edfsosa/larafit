@@ -23,13 +23,43 @@ class UsersTable
                     ->label('Nombre completo')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('document_number')
+                    ->label('Documento')
+                    ->numeric()
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('birth_date')
+                    ->label('Edad')
+                    ->getStateUsing(fn($record) => $record->birth_date ? $record->birth_date->age : 'N/A')
+                    ->sortable(),
+                TextColumn::make('gender')
+                    ->label('Género')
+                    ->badge()
+                    ->color(fn($state) => match ($state) {
+                        'male' => 'info',
+                        'female' => 'danger',
+                        default => 'primary',
+                    })
+                    ->formatStateUsing(fn($state) => match ($state) {
+                        'male' => 'Masculino',
+                        'female' => 'Femenino',
+                        default => $state,
+                    })
+                    ->sortable(),
                 TextColumn::make('email')
                     ->label('Correo electrónico')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->url(fn($record) => "mailto:{$record->email}"),
                 TextColumn::make('phone')
-                    ->label('Número de teléfono')
+                    ->label('Teléfono')
                     ->searchable()
+                    ->sortable()
+                    ->url(fn($record) => $record->phone ? "tel:{$record->phone}" : null)
+                    ->openUrlInNewTab(),
+                // Rol
+                TextColumn::make('roles.name')
+                    ->label('Rol')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Creado')

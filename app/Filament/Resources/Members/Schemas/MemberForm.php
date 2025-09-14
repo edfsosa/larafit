@@ -21,8 +21,20 @@ class MemberForm
                 DatePicker::make('joined_at')
                     ->label('Fecha de ingreso')
                     ->native(false)
+                    ->displayFormat('d/m/Y')
                     ->closeOnDateSelection()
                     ->default(now())
+                    ->required(),
+                Select::make('status')
+                    ->label('Estado')
+                    ->options([
+                        'active' => 'Activo',
+                        'inactive' => 'Inactivo',
+                        'suspended' => 'Suspendido',
+                    ])
+                    ->native(false)
+                    ->default('active')
+                    ->hiddenOn('create')
                     ->required(),
                 TextInput::make('emergency_contact_name')
                     ->label('Nombre del contacto de emergencia')
@@ -45,17 +57,6 @@ class MemberForm
                     ->maxValue(500)
                     ->step(0.1)
                     ->default(null),
-                Select::make('status')
-                    ->label('Estado')
-                    ->options([
-                        'active' => 'Activo',
-                        'inactive' => 'Inactivo',
-                        'suspended' => 'Suspendido',
-                    ])
-                    ->native(false)
-                    ->default('active')
-                    ->hiddenOn('create')
-                    ->required(),
             ])
             ->columns(3);
     }

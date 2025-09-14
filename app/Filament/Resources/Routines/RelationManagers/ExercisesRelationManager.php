@@ -20,6 +20,7 @@ use Filament\Tables\Table;
 class ExercisesRelationManager extends RelationManager
 {
     protected static string $relationship = 'exercises';
+    protected static ?string $title = 'Ejercicios';
 
     public function form(Schema $schema): Schema
     {
@@ -111,7 +112,7 @@ class ExercisesRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                     ->preloadRecordSelect()
-                    ->label('Adjuntar Ejercicio'),
+                    ->label('Agregar'),
             ])
             ->recordActions([
                 EditAction::make(),
@@ -120,7 +121,6 @@ class ExercisesRelationManager extends RelationManager
             ->toolbarActions([
                 BulkActionGroup::make([
                     DetachBulkAction::make(),
-                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

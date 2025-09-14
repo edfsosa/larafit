@@ -22,20 +22,23 @@ use Filament\Tables\Table;
 class MaintenancesRelationManager extends RelationManager
 {
     protected static string $relationship = 'maintenances';
+    protected static ?string $title = 'Mantenimientos';
 
     public function form(Schema $schema): Schema
     {
         return $schema
             ->components([
                 DatePicker::make('date')
-                    ->label('Fecha')
+                    ->label('Fecha de mantenimiento')
+                    ->default(now())
                     ->native(false)
+                    ->displayFormat('d/m/Y')
                     ->closeOnDateSelection()
                     ->required(),
                 Select::make('type')
                     ->label('Tipo')
                     ->options([
-                        'routine' => 'Rutina',
+                        'preventive' => 'Preventivo',
                         'repair' => 'Reparación',
                         'inspection' => 'Inspección',
                         'other' => 'Otro',
@@ -45,12 +48,16 @@ class MaintenancesRelationManager extends RelationManager
                 TextInput::make('cost')
                     ->label('Costo')
                     ->integer()
-                    ->step(1)
                     ->minValue(0)
+                    ->maxValue(999999999)
+                    ->default(0)
+                    ->prefix('₲')
                     ->required(),
                 Textarea::make('description')
                     ->label('Descripción')
                     ->rows(3)
+                    ->maxLength(1000)
+                    ->default(null)
                     ->columnSpanFull(),
             ])
             ->columns(3);
@@ -59,28 +66,33 @@ class MaintenancesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('date')
+            ->recordTitle("Mantenimiento")
             ->columns([
                 TextColumn::make('date')
                     ->label('Fecha')
-                    ->searchable()
                     ->date('d/m/Y')
                     ->sortable(),
                 TextColumn::make('type')
                     ->label('Tipo')
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'routine' => 'Rutina',
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'preventive' => 'success',
+                        'repair' => 'danger',
+                        'inspection' => 'warning',
+                        'other' => 'secondary',
+                        default => 'secondary',
+                    })
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'preventive' => 'Preventivo',
                         'repair' => 'Reparación',
                         'inspection' => 'Inspección',
                         'other' => 'Otro',
                         default => $state,
                     })
-                    ->searchable()
                     ->sortable(),
                 TextColumn::make('cost')
                     ->label('Costo')
                     ->money('PYG', true)
-                    ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Creado')
@@ -97,7 +109,8 @@ class MaintenancesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                CreateAction::make(),
+                CreateAction::make()
+                    ->label('Agregar Mantenimiento'),
             ])
             ->recordActions([
                 EditAction::make(),

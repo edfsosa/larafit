@@ -13,14 +13,18 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ExerciseResource extends Resource
 {
     protected static ?string $model = Exercise::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
+    protected static ?string $navigationLabel = 'Ejercicios';
+    protected static ?string $modelLabel = 'Ejercicio';
+    protected static ?string $pluralModelLabel = 'Ejercicios';
+    protected static ?int $navigationSort = 3;
     protected static ?string $recordTitleAttribute = 'name';
+    protected static string | UnitEnum | null $navigationGroup = 'Rutinas';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChevronDoubleRight;
 
     public static function form(Schema $schema): Schema
     {

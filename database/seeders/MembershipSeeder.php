@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Member;
+use App\Models\MemberMembership;
 use App\Models\Membership;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -63,6 +64,32 @@ class MembershipSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+        }
+
+        // poblar la tabla payments con datos de ejemplo
+        $paymentMethods = ['qr_code', 'credit_card', 'debit_card', 'bank_transfer', 'cash', 'paypal'];
+        $memberMemberships = MemberMembership::all();
+
+        foreach ($memberMemberships as $memberMembership) {
+            $numPayments = rand(1, 3); // Cada membresía puede tener entre 1 y 3 pagos
+
+            for ($i = 0; $i < $numPayments; $i++) {
+                $amount = $memberMembership->membership->price;
+                $paymentDate = (clone $memberMembership->start_date)->addDays(rand(0, $memberMembership->membership->duration_days));
+
+                // Asegurarse de que la fecha de pago no sea futura
+                if ($paymentDate->isFuture()) {
+                    $paymentDate = now()->subDays(rand(0, 30));
+                }
+
+                $memberMembership->payments()->create([
+                    'amount' => $amount,
+                    'date' => $paymentDate,
+                    'method' => $paymentMethods[array_rand($paymentMethods)],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
     }
 }

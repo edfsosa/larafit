@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('routine_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('member_routine_id')->constrained('member_routines')->cascadeOnDelete();
             $table->foreignId('reviewer_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('reviewed_id')->constrained('users')->cascadeOnDelete();
             $table->tinyInteger('rating')->unsigned();
             $table->text('comment')->nullable();
             $table->timestamps();
-            $table->unique(['routine_id', 'reviewer_id', 'reviewed_id']);
+            $table->unique(['member_routine_id', 'reviewer_id', 'reviewed_id']);
         });
     }
 

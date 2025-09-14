@@ -34,7 +34,7 @@ class MemberRoutinesTable
                     ->label('Estado')
                     ->badge()
                     ->color(fn($state) => match ($state) {
-                        'not_started' => 'gray',
+                        'not_started' => 'danger',
                         'in_progress' => 'warning',
                         'completed' => 'success',
                         default => 'gray',

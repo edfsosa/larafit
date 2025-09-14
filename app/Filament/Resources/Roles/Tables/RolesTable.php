@@ -24,8 +24,7 @@ class RolesTable
                     ->searchable(),
                 TextColumn::make('guard_name')
                     ->label('Guardia')
-                    ->sortable()
-                    ->searchable(),
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Creado')
                     ->dateTime('d/m/Y H:i')

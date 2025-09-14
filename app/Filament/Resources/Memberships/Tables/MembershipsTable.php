@@ -14,6 +14,9 @@ class MembershipsTable
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
                 TextColumn::make('name')
                     ->label('Nombre')
                     ->searchable()

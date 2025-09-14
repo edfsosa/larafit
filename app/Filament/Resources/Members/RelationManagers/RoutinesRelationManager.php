@@ -22,36 +22,41 @@ use Filament\Tables\Table;
 class RoutinesRelationManager extends RelationManager
 {
     protected static string $relationship = 'routines';
+    protected static ?string $title = 'Rutinas';
 
     public function form(Schema $schema): Schema
     {
         return $schema
             ->components([
                 DatePicker::make('assigned_at')
-                    ->label('Fecha de Asignación')
+                    ->label('Fecha de asignación')
+                    ->default(now())
                     ->native(false)
+                    ->displayFormat('d/m/Y')
                     ->closeOnDateSelection()
                     ->required(),
                 Select::make('status')
                     ->label('Estado')
                     ->options([
-                        'not_started' => 'No Iniciada',
-                        'in_progress' => 'En Progreso',
+                        'not_started' => 'No iniciada',
+                        'in_progress' => 'En progreso',
                         'completed' => 'Completada',
                     ])
                     ->native(false)
                     ->default('not_started')
+                    ->hiddenOn('create')
                     ->required(),
                 Select::make('trainer_id')
                     ->label('Entrenador')
                     ->options(function () {
-                        return \App\Models\Trainer::all()->pluck('user.name', 'id');
+                        return Trainer::with('user')->get()->pluck('user.name', 'id');
                     })
                     ->native(false)
-                    ->searchable()
                     ->preload()
+                    ->searchable()
                     ->required(),
-            ]);
+            ])
+            ->columns(3);
     }
 
     public function table(Table $table): Table
@@ -63,42 +68,31 @@ class RoutinesRelationManager extends RelationManager
                     ->label('Rutina')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('pivot.trainer_id')
+                    ->label('Entrenador')
+                    ->formatStateUsing(fn($state) => Trainer::find($state)?->user->name ?? 'N/A')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('pivot.assigned_at')
-                    ->label('Asignado')
+                    ->label('Asignada el')
                     ->date('d/m/Y')
                     ->sortable(),
                 TextColumn::make('pivot.status')
                     ->label('Estado')
                     ->badge()
                     ->color(fn($state) => match ($state) {
-                        'not_started' => 'secondary',
+                        'not_started' => 'danger',
                         'in_progress' => 'warning',
                         'completed' => 'success',
-                        default => 'secondary',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn($state) => match ($state) {
-                        'not_started' => 'No Iniciada',
-                        'in_progress' => 'En Progreso',
+                        'not_started' => 'No iniciada',
+                        'in_progress' => 'En progreso',
                         'completed' => 'Completada',
                         default => $state,
                     })
-                    ->searchable()
                     ->sortable(),
-                TextColumn::make('pivot.trainer_id')
-                    ->label('Entrenador')
-                    ->formatStateUsing(fn($state) => Trainer::find($state)?->user->name ?? 'N/A')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->label('Creado')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->label('Actualizado')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -106,7 +100,8 @@ class RoutinesRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                     ->preloadRecordSelect()
-                    ->label('Asignar Rutina'),
+                    ->label('Asignar')
+                    ->modalHeading('Asignar Rutina al Miembro'),
             ])
             ->recordActions([
                 EditAction::make(),

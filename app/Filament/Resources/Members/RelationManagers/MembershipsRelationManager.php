@@ -4,15 +4,11 @@ namespace App\Filament\Resources\Members\RelationManagers;
 
 use Filament\Actions\AttachAction;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\CreateAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\DetachAction;
 use Filament\Actions\DetachBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
@@ -21,19 +17,24 @@ use Filament\Tables\Table;
 class MembershipsRelationManager extends RelationManager
 {
     protected static string $relationship = 'memberships';
+    protected static ?string $title = 'Membresías';
 
     public function form(Schema $schema): Schema
     {
         return $schema
             ->components([
                 DatePicker::make('start_date')
-                    ->label('Inicio')
+                    ->label('Fecha de inicio')
+                    ->default(now())
                     ->native(false)
+                    ->displayFormat('d/m/Y')
                     ->closeOnDateSelection()
                     ->required(),
                 DatePicker::make('end_date')
-                    ->label('Fin')
+                    ->label('Fecha de fin')
+                    ->default(now()->addMonth())
                     ->native(false)
+                    ->displayFormat('d/m/Y')
                     ->closeOnDateSelection()
                     ->required(),
                 Select::make('status')
@@ -45,6 +46,7 @@ class MembershipsRelationManager extends RelationManager
                     ])
                     ->native(false)
                     ->default('active')
+                    ->hiddenOn('create')
                     ->required(),
             ])
             ->columns(3);
@@ -60,11 +62,11 @@ class MembershipsRelationManager extends RelationManager
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('pivot.start_date')
-                    ->label('Inicio')
+                    ->label('Fecha de Inicio')
                     ->date('d/m/Y')
                     ->sortable(),
                 TextColumn::make('pivot.end_date')
-                    ->label('Fin')
+                    ->label('Fecha de Fin')
                     ->date('d/m/Y')
                     ->sortable(),
                 TextColumn::make('pivot.status')
@@ -72,28 +74,17 @@ class MembershipsRelationManager extends RelationManager
                     ->badge()
                     ->color(fn($state) => match ($state) {
                         'active' => 'success',
-                        'expired' => 'danger',
-                        'cancelled' => 'warning',
-                        default => 'secondary',
+                        'expired' => 'warning',
+                        'cancelled' => 'danger',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn($state) => match ($state) {
-                        'active' => 'Activa',
-                        'expired' => 'Expirada',
-                        'cancelled' => 'Cancelada',
-                        default => 'Desconocido',
+                        'active' => 'Activo',
+                        'expired' => 'Expirado',
+                        'cancelled' => 'Cancelado',
+                        default => $state,
                     })
-                    ->searchable()
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->label('Creado')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->label('Actualizado')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -101,7 +92,8 @@ class MembershipsRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                     ->preloadRecordSelect()
-                    ->label('Asignar Membresía'),
+                    ->label('Asignar')
+                    ->modalHeading('Asignar Membresía al Miembro'),
             ])
             ->recordActions([
                 EditAction::make(),

@@ -11,12 +11,10 @@ class Routine extends Model
         'description',
         'difficulty',
         'duration_minutes',
-        'is_active',
     ];
 
     protected $casts = [
         'duration_minutes' => 'integer',
-        'is_active' => 'boolean',
     ];
 
     public function exercises()
@@ -31,10 +29,5 @@ class Routine extends Model
         return $this->belongsToMany(Member::class, 'member_routines')
             ->withPivot('assigned_at', 'status', 'notes', 'trainer_id')
             ->withTimestamps();
-    }
-
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
     }
 }

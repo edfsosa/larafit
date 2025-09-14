@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     protected $fillable = [
-        'routine_id',
+        'member_routine_id',
         'reviewer_id',
         'reviewed_id',
         'rating',
@@ -18,9 +18,9 @@ class Review extends Model
         'rating' => 'integer',
     ];
 
-    public function routine()
+    public function memberRoutine()
     {
-        return $this->belongsTo(Routine::class);
+        return $this->belongsTo(MemberRoutine::class, 'member_routine_id');
     }
 
     public function reviewer()

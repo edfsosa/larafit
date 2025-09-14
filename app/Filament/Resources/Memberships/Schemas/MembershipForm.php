@@ -17,21 +17,21 @@ class MembershipForm
                     ->required(),
                 TextInput::make('price')
                     ->label('Precio')
-                    ->required()
                     ->integer()
-                    ->minValue(1)
-                    ->maxLength(10)
-                    ->step(1),
+                    ->minValue(0)
+                    ->maxValue(999999999)
+                    ->default(0)
+                    ->prefix('₲')
+                    ->required(),
                 TextInput::make('duration_days')
                     ->label('Duración (días)')
-                    ->required()
                     ->integer()
                     ->minValue(1)
                     ->maxLength(3)
-                    ->helperText('Por ejemplo, 30 para mensual, 365 para anual')
-                    ->step(1),
+                    ->required(),
                 Textarea::make('description')
                     ->label('Descripción')
+                    ->rows(3)
                     ->default(null)
                     ->columnSpanFull(),
             ])

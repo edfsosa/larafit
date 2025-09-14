@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class PaymentsTable
@@ -33,14 +34,14 @@ class PaymentsTable
                 TextColumn::make('method')
                     ->label('Método de Pago')
                     ->formatStateUsing(fn($state) => match ($state) {
+                        'qr_code' => 'QR',
                         'credit_card' => 'Tarjeta de Crédito',
                         'debit_card' => 'Tarjeta de Débito',
-                        'paypal' => 'PayPal',
                         'bank_transfer' => 'Transferencia Bancaria',
                         'cash' => 'Efectivo',
+                        'paypal' => 'PayPal',
                         default => $state,
                     })
-                    ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Creado')
@@ -54,7 +55,18 @@ class PaymentsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('method')
+                    ->label('Método de Pago')
+                    ->options([
+                        'qr_code' => 'QR',
+                        'credit_card' => 'Tarjeta de Crédito',
+                        'debit_card' => 'Tarjeta de Débito',
+                        'bank_transfer' => 'Transferencia Bancaria',
+                        'cash' => 'Efectivo',
+                        'paypal' => 'PayPal',
+                    ])
+                    ->multiple()
+                    ->native(false),
             ])
             ->recordActions([
                 EditAction::make(),
