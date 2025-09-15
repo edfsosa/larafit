@@ -17,8 +17,6 @@ return new class extends Migration
             $table->date('joined_at')->nullable();
             $table->string('emergency_contact_name')->nullable();
             $table->string('emergency_contact_phone')->nullable();
-            $table->decimal('height', 5, 2)->nullable();
-            $table->decimal('weight', 5, 2)->nullable();
             $table->enum('status', ['active', 'inactive', 'suspended'])->default('active');
             $table->timestamps();
         });

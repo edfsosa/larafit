@@ -23,6 +23,7 @@ use Filament\Tables\Table;
 class PaymentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'payments';
+    protected static ?string $title = 'Pagos';
 
     public function form(Schema $schema): Schema
     {
@@ -41,7 +42,7 @@ class PaymentsRelationManager extends RelationManager
                     ->native(false)
                     ->preload()
                     ->required()
-                    ->searchable(),                
+                    ->searchable(),
                 TextInput::make('amount')
                     ->label('Monto')
                     ->integer()
@@ -81,7 +82,7 @@ class PaymentsRelationManager extends RelationManager
                     ->label('Fecha')
                     ->date('d/m/Y')
                     ->sortable(),
-                TextColumn::make('membership.name')
+                TextColumn::make('memberMembership.membership.name')
                     ->label('Membresía')
                     ->searchable()
                     ->sortable(),
@@ -116,7 +117,8 @@ class PaymentsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                CreateAction::make(),
+                CreateAction::make()
+                    ->label('Crear Pago'),
             ])
             ->recordActions([
                 EditAction::make(),

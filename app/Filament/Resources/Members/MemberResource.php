@@ -43,6 +43,7 @@ class MemberResource extends Resource
             RelationManagers\RoutinesRelationManager::class,
             RelationManagers\MembershipsRelationManager::class,
             RelationManagers\PaymentsRelationManager::class,
+            RelationManagers\GoalsRelationManager::class,
         ];
     }
 

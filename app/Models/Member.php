@@ -11,15 +11,11 @@ class Member extends Model
         'joined_at',
         'emergency_contact_name',
         'emergency_contact_phone',
-        'height',
-        'weight',
         'status',
     ];
 
     protected $casts = [
         'joined_at' => 'date',
-        'height' => 'decimal:2',
-        'weight' => 'decimal:2',
     ];
 
     public function user()
@@ -67,5 +63,17 @@ class Member extends Model
     public function getFullNameAttribute()
     {
         return $this->user?->name;
+    }
+
+    public function goals()
+    {
+        return $this->belongsToMany(Goal::class, 'goal_members')
+            ->withPivot('assigned_at', 'status')
+            ->withTimestamps();
+    }
+
+    public function fitnessProfile()
+    {
+        return $this->hasOne(FitnessProfile::class);
     }
 }

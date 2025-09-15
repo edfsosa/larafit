@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             ExerciseRoutineSeeder::class,
             MembershipSeeder::class,
             EquipmentSeeder::class,
-            MemberRoutineAndReviewSeeder::class
+            MemberRoutineAndReviewSeeder::class,
+            GoalSeeder::class,
         ]);
     }
 }
