@@ -17,17 +17,18 @@ class Routine extends Model
         'duration_minutes' => 'integer',
     ];
 
-    public function exercises()
-    {
-        return $this->belongsToMany(Exercise::class, 'exercise_routines')
-            ->withPivot('sets', 'reps', 'rest_seconds', 'duration_seconds', 'order', 'instructions')
-            ->withTimestamps();
-    }
-
     public function members()
     {
         return $this->belongsToMany(Member::class, 'member_routines')
             ->withPivot('assigned_at', 'status', 'notes', 'trainer_id')
             ->withTimestamps();
+    }
+
+    public function exercises()
+    {
+        return $this->belongsToMany(Exercise::class, 'routine_exercises')
+            ->withPivot('order')
+            ->withTimestamps()
+            ->orderBy('pivot_order');
     }
 }

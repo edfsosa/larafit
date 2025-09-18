@@ -120,4 +120,9 @@ class User extends Authenticatable implements FilamentUser
         }
         return now()->diffInYears($this->birth_date);
     }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
 }

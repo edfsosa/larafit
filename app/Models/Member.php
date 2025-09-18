@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Member extends Model
 {
+    use Notifiable;
+
     protected $fillable = [
         'user_id',
         'joined_at',
@@ -37,27 +40,21 @@ class Member extends Model
             ->withTimestamps();
     }
 
+    public function plans()
+    {
+        return $this->belongsToMany(TrainingPlan::class, 'member_plans')
+            ->withPivot('assigned_at', 'status', 'trainer_id', 'notes')
+            ->withTimestamps();
+    }
+
     public function payments()
     {
         return $this->hasManyThrough(Payment::class, MemberMembership::class);
     }
 
-    public function attendances()
+    public function attendanceRecords()
     {
-        return $this->morphMany(Attendance::class, 'attendable');
-    }
-
-    public function routines()
-    {
-        return $this->belongsToMany(Routine::class, 'member_routines')
-            ->withPivot('assigned_at', 'status', 'notes', 'trainer_id')
-            ->withTimestamps();
-    }
-
-    public function routineAssignments()
-    {
-        return $this->hasMany(MemberRoutine::class)
-            ->with('routine', 'trainer');
+        return $this->morphMany(AttendanceRecord::class, 'attendable');
     }
 
     public function getFullNameAttribute()
@@ -75,5 +72,15 @@ class Member extends Model
     public function fitnessProfile()
     {
         return $this->hasOne(FitnessProfile::class);
+    }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
+
+    public function reviews()
+    {
+        return $this->morphMany(Review::class, 'author');
     }
 }

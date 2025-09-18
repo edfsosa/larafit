@@ -50,6 +50,10 @@ class ExercisesTable
                         default => $state,
                     })
                     ->sortable(),
+                TextColumn::make('equipment.name')
+                    ->label('Equipo')
+                    ->default('Ninguno')
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Creado')
                     ->dateTime('d/m/Y H:i')

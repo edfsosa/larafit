@@ -13,13 +13,19 @@ class Exercise extends Model
         'muscle_group',
         'image',
         'video_url',
+        'equipment_id',
     ];
+
+    public function equipment()
+    {
+        return $this->belongsTo(Equipment::class);
+    }
 
     public function routines()
     {
-        return $this->belongsToMany(Routine::class, 'exercise_routines')
-                    ->withPivot('sets', 'reps', 'rest_seconds', 'duration_seconds', 'order', 'instructions')
-                    ->orderByPivot('order')
-                    ->withTimestamps();
+        return $this->belongsToMany(Routine::class, 'routine_exercises')
+            ->withPivot('order')
+            ->withTimestamps()
+            ->orderBy('pivot_order');
     }
 }

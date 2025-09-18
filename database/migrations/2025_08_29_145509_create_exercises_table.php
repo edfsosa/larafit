@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('muscle_group', ['chest', 'back', 'legs', 'arms', 'shoulders', 'core', 'full_body', 'other'])->default('full_body');
             $table->string('image')->nullable();
             $table->string('video_url')->nullable();
+            $table->foreignId('equipment_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

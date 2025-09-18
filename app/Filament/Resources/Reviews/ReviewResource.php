@@ -3,13 +3,19 @@
 namespace App\Filament\Resources\Reviews;
 
 use App\Filament\Resources\Reviews\Pages\ManageReviews;
+use App\Models\Member;
+use App\Models\MemberPlan;
 use App\Models\MemberRoutine;
+use App\Models\MemberTrainer;
 use App\Models\Review;
+use App\Models\Trainer;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\MorphToSelect;
+use Filament\Forms\Components\MorphToSelect\Type;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -35,30 +41,28 @@ class ReviewResource extends Resource
     {
         return $schema
             ->components([
-                Select::make('member_routine_id')
-                    ->label('Rutina')
-                    ->options(function () {
-                        return MemberRoutine::with('member', 'routine')
-                            ->get()
-                            ->mapWithKeys(function ($mr) {
-                                return [$mr->id => $mr->member->user->name . ' - ' . $mr->routine->name];
-                            })
-                            ->toArray();
-                    })
-                    ->disabled()
-                    ->required(),
-                Select::make('reviewer_id')
+                MorphToSelect::make('author')
                     ->label('Revisor')
-                    ->relationship('reviewer', 'name')
-                    ->preload()
-                    ->searchable()
+                    ->types([
+                        Type::make(Member::class)
+                            ->label('Miembro')
+                            ->getOptionLabelFromRecordUsing(fn(Member $record): string => $record->user->name),
+                        Type::make(Trainer::class)
+                            ->label('Entrenador')
+                            ->getOptionLabelFromRecordUsing(fn(Trainer $record): string => $record->user->name),
+                    ])
                     ->native(false)
                     ->required(),
-                Select::make('reviewed_id')
+                MorphToSelect::make('reviewable')
                     ->label('Revisado')
-                    ->relationship('reviewed', 'name')
-                    ->preload()
-                    ->searchable()
+                    ->types([
+                        Type::make(MemberPlan::class)
+                            ->label('Plan asignado')
+                            ->getOptionLabelFromRecordUsing(fn(MemberPlan $record): string => $record->plan->name),
+                        Type::make(MemberTrainer::class)
+                            ->label('Entrenador asignado')
+                            ->getOptionLabelFromRecordUsing(fn(MemberTrainer $record): string => $record->member->user->name),
+                    ])
                     ->native(false)
                     ->required(),
                 TextInput::make('rating')
@@ -85,21 +89,17 @@ class ReviewResource extends Resource
                 TextColumn::make('id')
                     ->label('ID')
                     ->sortable(),
-                TextColumn::make('memberRoutine.routine.name')
-                    ->label('Rutina')
+                TextColumn::make('author.user.name')
+                    ->label('Autor')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('reviewer.name')
+                TextColumn::make('reviewable_type')
                     ->label('Revisor')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('reviewed.name')
-                    ->label('Revisado')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('rating')
                     ->label('Calificación')
-                    ->formatStateUsing(fn (string $state): string => "{$state}/5")
+                    ->formatStateUsing(fn(string $state): string => "{$state}/5")
                     ->sortable(),
                 TextColumn::make('comment')
                     ->label('Comentario')
@@ -117,20 +117,6 @@ class ReviewResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('member_routine_id')
-                    ->label('Rutina')
-                    ->options(function () {
-                        return MemberRoutine::with('member', 'routine')
-                            ->get()
-                            ->mapWithKeys(function ($mr) {
-                                return [$mr->id => $mr->routine->name];
-                            })
-                            ->toArray();
-                    })
-                    ->preload()
-                    ->searchable()
-                    ->multiple()
-                    ->native(false),
                 SelectFilter::make('rating')
                     ->label('Calificación')
                     ->options([
@@ -140,20 +126,6 @@ class ReviewResource extends Resource
                         4 => '4',
                         5 => '5',
                     ])
-                    ->native(false),
-                SelectFilter::make('reviewer_id')
-                    ->label('Revisor')
-                    ->relationship('reviewer', 'name')
-                    ->preload()
-                    ->searchable()
-                    ->multiple()
-                    ->native(false),
-                SelectFilter::make('reviewed_id')
-                    ->label('Revisado')
-                    ->relationship('reviewed', 'name')
-                    ->preload()
-                    ->searchable()
-                    ->multiple()
                     ->native(false),
             ])
             ->recordActions([

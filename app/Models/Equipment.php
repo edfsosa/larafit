@@ -32,14 +32,9 @@ class Equipment extends Model
         return $this->hasMany(EquipmentMaintenance::class, 'equipment_id');
     }
 
-    public function exerciseRoutines()
-    {
-        return $this->hasMany(ExerciseRoutine::class, 'equipment_id');
-    }
-
     public function exercises()
     {
-        return $this->hasManyThrough(Exercise::class, ExerciseRoutine::class);
+        return $this->hasMany(Exercise::class, 'equipment_id');
     }
 
     public function scopeAvailable($query)

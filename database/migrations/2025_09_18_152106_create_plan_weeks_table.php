@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('plan_weeks', function (Blueprint $table) {
             $table->id();
-            $table->morphs('author');
-            $table->morphs('reviewable');
-            $table->tinyInteger('rating')->unsigned();
-            $table->text('comment')->nullable();
+            $table->foreignId('plan_phase_id')->constrained()->cascadeOnDelete();
+            $table->integer('number');
             $table->timestamps();
-            $table->unique(['author_type', 'author_id', 'reviewable_type', 'reviewable_id'], 'unique_review');
+            $table->unique(['plan_phase_id', 'number']);
         });
     }
 
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('plan_weeks');
     }
 };

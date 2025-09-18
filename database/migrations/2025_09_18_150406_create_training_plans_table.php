@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('training_plans', function (Blueprint $table) {
             $table->id();
-            $table->morphs('author');
-            $table->morphs('reviewable');
-            $table->tinyInteger('rating')->unsigned();
-            $table->text('comment')->nullable();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->enum('difficulty', ['beginner', 'intermediate', 'advanced'])->default('beginner');
+            $table->boolean('is_template')->default(true);
             $table->timestamps();
-            $table->unique(['author_type', 'author_id', 'reviewable_type', 'reviewable_id'], 'unique_review');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('training_plans');
     }
 };

@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('attendance_records', function (Blueprint $table) {
             $table->id();
-            $table->morphs('author');
-            $table->morphs('reviewable');
-            $table->tinyInteger('rating')->unsigned();
-            $table->text('comment')->nullable();
+            $table->morphs('attendable');
+            $table->timestamp('checked_in_at');
+            $table->timestamp('checked_out_at')->nullable();
+            $table->enum('method', ['manual', 'qr_code', 'biometric', 'face_recognition'])->default('manual');
             $table->timestamps();
-            $table->unique(['author_type', 'author_id', 'reviewable_type', 'reviewable_id'], 'unique_review');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('attendance_records');
     }
 };

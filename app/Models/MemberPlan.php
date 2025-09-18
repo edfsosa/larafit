@@ -4,16 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MemberTrainer extends Model
+class MemberPlan extends Model
 {
     protected $fillable = [
         'member_id',
+        'training_plan_id',
         'trainer_id',
-        'assigned_at'
+        'assigned_at',
+        'status',
+        'notes',
     ];
 
     protected $casts = [
-        'assigned_at' => 'datetime',
+        'assigned_at' => 'date',
     ];
 
     public function member()
@@ -21,19 +24,14 @@ class MemberTrainer extends Model
         return $this->belongsTo(Member::class);
     }
 
+    public function plan()
+    {
+        return $this->belongsTo(TrainingPlan::class);
+    }
+
     public function trainer()
     {
         return $this->belongsTo(Trainer::class);
-    }
-
-    public function getMemberNameAttribute()
-    {
-        return $this->member?->user?->name;
-    }
-
-    public function getTrainerNameAttribute()
-    {
-        return $this->trainer?->user?->name;
     }
 
     public function reviews()

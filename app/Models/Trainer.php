@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Trainer extends Model
 {
+    use Notifiable;
+
     protected $fillable = [
         'user_id',
         'specialty',
@@ -24,9 +27,9 @@ class Trainer extends Model
             ->withTimestamps();
     }
 
-    public function attendances()
+    public function attendanceRecords()
     {
-        return $this->morphMany(Attendance::class, 'attendable');
+        return $this->morphMany(AttendanceRecord::class, 'attendable');
     }
 
     public function assignedRoutines()
@@ -36,14 +39,23 @@ class Trainer extends Model
             ->withTimestamps();
     }
 
-    public function memberRoutines()
+    public function memberPlans()
     {
-        return $this->hasMany(MemberRoutine::class)
-            ->with('routine', 'member');
+        return $this->hasMany(MemberPlan::class)->with('plan', 'member');
     }
 
     public function getFullNameAttribute()
     {
         return $this->user?->name;
+    }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
+
+    public function reviews()
+    {
+        return $this->morphMany(Review::class, 'author');
     }
 }
