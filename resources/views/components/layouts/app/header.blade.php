@@ -23,6 +23,10 @@
                 :current="request()->routeIs('memberships.*')" wire:navigate>
                 {{ __('Memberships') }}
             </flux:navbar.item>
+            <flux:navbar.item icon="layout-grid" :href="route('plans.index')"
+                :current="request()->routeIs('plans.*')" wire:navigate>
+                {{ __('Plans') }}
+            </flux:navbar.item>
         </flux:navbar>
 
         <flux:spacer />

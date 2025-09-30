@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TrainingPlans\Schemas;
 
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -37,7 +38,36 @@ class TrainingPlanForm
                     ->label('¿Es una plantilla?')
                     ->inline(false)
                     ->default(true)
-                    ->required(),
+                    ->required()
+                    ->columnSpanFull(),
+                Repeater::make('phases')
+                    ->label('Fases del Plan')
+                    ->relationship()
+                    ->columnSpanFull()
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Nombre de la Fase')
+                            ->maxLength(255)
+                            ->required(),
+                        Textarea::make('description')
+                            ->label('Descripción de la Fase')
+                            ->rows(2)
+                            ->maxLength(1000)
+                            ->nullable(),
+                        Repeater::make('weeks')
+                            ->label('Semanas')
+                            ->relationship()
+                            ->schema([
+                                TextInput::make('number')
+                                    ->label('Número de Semana')
+                                    ->numeric()
+                                    ->minValue(1)
+                                    ->required(),
+                            ])
+                            ->defaultItems(1)    
+                            ->minItems(1)
+                            ->required(),
+                    ])
             ]);
     }
 }

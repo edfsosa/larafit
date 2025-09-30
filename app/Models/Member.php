@@ -92,6 +92,12 @@ class Member extends Model
             ->withTimestamps();
     }
 
+    // Relacion uno a muchos con member_plans
+    public function assignedPlans()
+    {
+        return $this->hasMany(MemberPlan::class);
+    }
+
     // Relacion con pagos a traves de member_memberships
     public function payments()
     {
