@@ -125,4 +125,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->morphMany(Notification::class, 'notifiable');
     }
+
+    public function preferences()
+    {
+        return $this->hasOne(UserPreference::class);
+    }
 }

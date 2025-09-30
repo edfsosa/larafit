@@ -19,9 +19,9 @@
                 wire:navigate>
                 {{ __('Dashboard') }}
             </flux:navbar.item>
-            <flux:navbar.item icon="layout-grid" :href="route('routines')" :current="request()->routeIs('routines')"
-                wire:navigate>
-                {{ __('My Routines') }}
+            <flux:navbar.item icon="layout-grid" :href="route('memberships.index')"
+                :current="request()->routeIs('memberships.*')" wire:navigate>
+                {{ __('Memberships') }}
             </flux:navbar.item>
         </flux:navbar>
 
