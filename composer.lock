@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcb084daf49ed7b86e1dd24b5a28ba62",
+    "content-hash": "a7e591edcde0d85f108ababd3fc7942c",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -3397,16 +3397,16 @@
         },
         {
             "name": "livewire/flux",
-            "version": "v2.2.6",
+            "version": "v2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/livewire/flux.git",
-                "reference": "a0e8f33a5cd54ead4d8e27721961425ccbae2e33"
+                "reference": "7d236c6caa6a8fa8604caa08abf2ae630be12c24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/livewire/flux/zipball/a0e8f33a5cd54ead4d8e27721961425ccbae2e33",
-                "reference": "a0e8f33a5cd54ead4d8e27721961425ccbae2e33",
+                "url": "https://api.github.com/repos/livewire/flux/zipball/7d236c6caa6a8fa8604caa08abf2ae630be12c24",
+                "reference": "7d236c6caa6a8fa8604caa08abf2ae630be12c24",
                 "shasum": ""
             },
             "require": {
@@ -3457,9 +3457,9 @@
             ],
             "support": {
                 "issues": "https://github.com/livewire/flux/issues",
-                "source": "https://github.com/livewire/flux/tree/v2.2.6"
+                "source": "https://github.com/livewire/flux/tree/v2.5.0"
             },
-            "time": "2025-08-27T02:05:01+00:00"
+            "time": "2025-09-29T21:36:00+00:00"
         },
         {
             "name": "livewire/livewire",

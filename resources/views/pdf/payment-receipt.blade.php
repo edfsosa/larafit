@@ -6,26 +6,63 @@
     <title>Comprobante de Pago</title>
     <style>
         body {
-            font-family: sans-serif;
-            font-size: 12px;
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 13px;
+            color: #333;
+            padding: 20px;
         }
 
-        h1,
-        h2,
-        h3 {
-            margin-bottom: 5px;
+        h1 {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
         }
 
-        table {
+        p {
+            margin: 5px 0;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 15px;
+            text-decoration: underline;
+        }
+
+        .info-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
 
-        th,
-        td {
-            padding: 6px;
-            text-align: left;
+        .info-table td {
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        .footer {
+            font-size: 10px;
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: #f3f3f3;
+            border: 1px solid #999;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -33,25 +70,62 @@
 <body>
     <h1>Comprobante de Pago</h1>
 
-    <p><strong>Miembro:</strong> {{ $member->getFullNameAttribute() }}</p>
-    <p><strong>Documento:</strong> {{ $member->getDocumentNumberAttribute() }}</p>
+    <div class="section">
+        <div class="section-title">Datos del Miembro</div>
+        <table class="info-table">
+            <tr>
+                <td><strong>Nombre:</strong></td>
+                <td>{{ $member->getFullNameAttribute() }}</td>
+            </tr>
+            <tr>
+                <td><strong>Documento:</strong></td>
+                <td>{{ $member->getDocumentNumberAttribute() }}</td>
+            </tr>
+        </table>
+    </div>
 
-    <hr>
+    <div class="section">
+        <div class="section-title">Detalles de la Membresía</div>
+        <table class="info-table">
+            <tr>
+                <td><strong>Nombre:</strong></td>
+                <td>{{ $payment->memberMembership->membership->name }}</td>
+            </tr>
+            <tr>
+                <td><strong>Descripción:</strong></td>
+                <td>{{ $payment->memberMembership->membership->description }}</td>
+            </tr>
+        </table>
+    </div>
 
-    <p><strong>Membresía:</strong> {{ $payment->memberMembership->membership->name }}</p>
-    <p><strong>Descripción:</strong> {{ $payment->memberMembership->membership->description }}</p>
+    <div class="section">
+        <div class="section-title">Información del Pago</div>
+        <table class="info-table">
+            <tr>
+                <td><strong>Monto:</strong></td>
+                <td>{{ $payment->getFormattedAmountAttribute() }}</td>
+            </tr>
+            <tr>
+                <td><strong>Método de Pago:</strong></td>
+                <td>{{ $payment->getMethodAttribute() }}</td>
+            </tr>
+            <tr>
+                <td><strong>Fecha:</strong></td>
+                <td>{{ $payment->getFormattedDateAttribute() }}</td>
+            </tr>
+            @if ($payment->notes)
+                <tr>
+                    <td><strong>Notas:</strong></td>
+                    <td>{{ $payment->notes }}</td>
+                </tr>
+            @endif
+        </table>
+    </div>
 
-    <hr>
-
-    <p><strong>Monto:</strong> Gs. {{ number_format($payment->amount, 0, ',', '.') }}</p>
-    <p><strong>Método de pago:</strong> {{ $payment->method }}</p>
-    <p><strong>Fecha de pago:</strong> {{ \Carbon\Carbon::parse($payment->date)->format('d/m/Y') }}</p>
-    @if ($payment->notes)
-        <p><strong>Notas:</strong> {{ $payment->notes }}</p>
-    @endif
-
-    <hr>
-    <p style="font-size: 10px; margin-top: 20px;">Gracias por su pago. Guarde este comprobante como respaldo.</p>
+    <div class="footer">
+        Gracias por su pago.<br>
+        Guarde este comprobante como respaldo.
+    </div>
 </body>
 
 </html>

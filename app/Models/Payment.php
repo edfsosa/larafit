@@ -33,4 +33,36 @@ class Payment extends Model
     {
         return $this->memberMembership?->membership?->name;
     }
+
+    public function getMethodAttribute()
+    {
+        switch ($this->attributes['method']) {
+            case 'credit_card':
+                return 'Tarjeta de Crédito';
+            case 'debit_card':
+                return 'Tarjeta de Débito';
+            case 'paypal':
+                return 'PayPal';
+            case 'bank_transfer':
+                return 'Transferencia Bancaria';
+            case 'cash':
+                return 'Efectivo';
+            case 'qr_code':
+                return 'Código QR';
+            default:
+                return 'Otro';
+        }
+    }
+
+    // Formato personalizado para el monto
+    public function getFormattedAmountAttribute()
+    {
+        return 'Gs. ' . number_format($this->amount, 0, ',', '.');
+    }
+
+    // Formato personalizado para la fecha
+    public function getFormattedDateAttribute()
+    {
+        return $this->date->format('d/m/Y');
+    }
 }

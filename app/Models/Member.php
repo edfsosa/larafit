@@ -41,7 +41,7 @@ class Member extends Model
     public function activeMemberMembership()
     {
         return $this->memberMemberships()
-            ->where('status', 'active')
+            ->whereIn('status', ['active', 'pending'])
             ->with('membership', 'payments')
             ->latest('start_date')
             ->first();
@@ -50,7 +50,7 @@ class Member extends Model
     public function historicalMemberMemberships()
     {
         return $this->memberMemberships()
-            ->where('status', '!=', 'active')
+            ->whereNotIn('status', ['active', 'pending'])
             ->with('membership', 'payments')
             ->orderByDesc('start_date')
             ->get();

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('membership_id')->constrained()->cascadeOnDelete();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->enum('status', ['active', 'expired', 'cancelled'])->default('active');
+            $table->enum('status', ['active', 'expired', 'cancelled', 'pending', 'suspended'])->default('pending');
             $table->timestamps();
         });
     }
